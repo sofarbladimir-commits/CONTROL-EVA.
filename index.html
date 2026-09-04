@@ -17,6 +17,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <style>
   body { margin: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
 </style>
@@ -30,6 +32,36 @@ const STORAGE_KEY_PERSONAL = "control-examenes:personal";
 const STORAGE_KEY_REGISTROS = "control-examenes:registros";
 const STORAGE_KEY_MENSAJE_CONFIG = "control-examenes:mensajeConfig";
 const STORAGE_KEY_PROFESORES_MATERIA = "control-examenes:profesoresMateria";
+
+// ============================================================
+// CONFIGURACIÓN DE FIREBASE (para compartir datos entre celulares)
+// Pegue aquí el objeto "firebaseConfig" que Firebase le da al
+// registrar su app web. Mientras quede vacío ("" en cada campo),
+// la app funciona en modo local (cada celular guarda por su cuenta).
+// ============================================================
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyC7K0cpcAx4jj7V3GmRiOq2al90JT67OdU",
+  authDomain: "evaluaciones-b12ed.firebaseapp.com",
+  databaseURL: "https://evaluaciones-b12ed-default-rtdb.firebaseio.com",
+  projectId: "evaluaciones-b12ed",
+  storageBucket: "evaluaciones-b12ed.firebasestorage.app",
+  messagingSenderId: "1053919894763",
+  appId: "1:1053919894763:web:e96ae3379bceae374572ae",
+};
+
+function firebaseConfigCompleto() {
+  return Boolean(FIREBASE_CONFIG.databaseURL && FIREBASE_CONFIG.apiKey);
+}
+
+let fbDb = null;
+if (firebaseConfigCompleto() && typeof firebase !== "undefined") {
+  try {
+    firebase.initializeApp(FIREBASE_CONFIG);
+    fbDb = firebase.database();
+  } catch (e) {
+    fbDb = null;
+  }
+}
 
 const PERSONAL_INICIAL = [
   { grado: "Tcnl. DEM.", nombre: "Nielsen A. Fernández Aliaga" },
@@ -158,6 +190,7 @@ function ControlExamenes() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [sinAlmacenPersistente, setSinAlmacenPersistente] = useState(false);
+  const [usandoNube, setUsandoNube] = useState(false);
 
   const [nuevoNombre, setNuevoNombre] = useState("");
   const [filtroCiclo, setFiltroCiclo] = useState("Todos");
@@ -201,6 +234,40 @@ function ControlExamenes() {
   }
 
   useEffect(() => {
+    if (fbDb) {
+      setUsandoNube(true);
+      const refPersonal = fbDb.ref(STORAGE_KEY_PERSONAL);
+      const refRegistros = fbDb.ref(STORAGE_KEY_REGISTROS);
+      const refMensaje = fbDb.ref(STORAGE_KEY_MENSAJE_CONFIG);
+      const refProfesores = fbDb.ref(STORAGE_KEY_PROFESORES_MATERIA);
+
+      const cbPersonal = (snap) => {
+        const val = snap.val();
+        if (val) {
+          setPersonal(val);
+        } else {
+          setPersonal(PERSONAL_INICIAL);
+          refPersonal.set(PERSONAL_INICIAL);
+        }
+      };
+      const cbRegistros = (snap) => setRegistros(snap.val() || []);
+      const cbMensaje = (snap) => setRolesConfig(snap.val() || ROLES_DEFECTO);
+      const cbProfesores = (snap) => setProfesoresPorMateria(snap.val() || {});
+
+      refPersonal.on("value", cbPersonal);
+      refRegistros.on("value", cbRegistros);
+      refMensaje.on("value", cbMensaje);
+      refProfesores.on("value", cbProfesores);
+      setLoading(false);
+
+      return () => {
+        refPersonal.off("value", cbPersonal);
+        refRegistros.off("value", cbRegistros);
+        refMensaje.off("value", cbMensaje);
+        refProfesores.off("value", cbProfesores);
+      };
+    }
+
     (async () => {
       if (!hasClaudeStorage() && !hasLocalStorage()) {
         setSinAlmacenPersistente(true);
@@ -244,26 +311,34 @@ function ControlExamenes() {
     })();
   }, []);
 
+  async function guardarDato(key, valor, setState) {
+    setState(valor);
+    if (fbDb) {
+      try {
+        await fbDb.ref(key).set(valor);
+      } catch (e) {
+        setError("No se pudo guardar en la nube. Verifique su conexión a internet.");
+      }
+      return;
+    }
+    const ok = await storageSet(key, JSON.stringify(valor));
+    if (!ok && (hasClaudeStorage() || hasLocalStorage())) setError("No se pudo guardar los datos.");
+  }
+
   async function guardarPersonal(next) {
-    setPersonal(next);
-    const ok = await storageSet(STORAGE_KEY_PERSONAL, JSON.stringify(next));
-    if (!ok && (hasClaudeStorage() || hasLocalStorage())) setError("No se pudo guardar la lista de personal.");
+    return guardarDato(STORAGE_KEY_PERSONAL, next, setPersonal);
   }
 
   async function guardarRegistros(next) {
-    setRegistros(next);
-    const ok = await storageSet(STORAGE_KEY_REGISTROS, JSON.stringify(next));
-    if (!ok && (hasClaudeStorage() || hasLocalStorage())) setError("No se pudo guardar el registro.");
+    return guardarDato(STORAGE_KEY_REGISTROS, next, setRegistros);
   }
 
   async function guardarRolesConfig(next) {
-    setRolesConfig(next);
-    await storageSet(STORAGE_KEY_MENSAJE_CONFIG, JSON.stringify(next));
+    return guardarDato(STORAGE_KEY_MENSAJE_CONFIG, next, setRolesConfig);
   }
 
   async function guardarProfesoresPorMateria(next) {
-    setProfesoresPorMateria(next);
-    await storageSet(STORAGE_KEY_PROFESORES_MATERIA, JSON.stringify(next));
+    return guardarDato(STORAGE_KEY_PROFESORES_MATERIA, next, setProfesoresPorMateria);
   }
 
   function toggleProfesorMateria(materiaId, personaId) {
@@ -571,8 +646,13 @@ function ControlExamenes() {
   return (
     <div style={{ fontFamily: "'Segoe UI', system-ui, -apple-system, sans-serif", background: parchment, color: inkDark, minHeight: "100vh" }}>
       <div style={{ background: oliveDeep, color: brassLight, padding: "22px 28px", borderBottom: "3px solid " + brass }}>
-        <div style={{ fontFamily: "Georgia, 'Times New Roman', serif", fontSize: 22, letterSpacing: 0.3 }}>
-          Control de apoyo en exámenes
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
+          <div style={{ fontFamily: "Georgia, 'Times New Roman', serif", fontSize: 22, letterSpacing: 0.3 }}>
+            Control de apoyo en exámenes
+          </div>
+          <span style={{ fontSize: 11, background: usandoNube ? "#3fa15e" : "#7a5a2a", color: "#fff", borderRadius: 12, padding: "3px 10px" }}>
+            {usandoNube ? "● Sincronizado en la nube" : "● Modo local (solo este dispositivo)"}
+          </span>
         </div>
         <div style={{ fontSize: 13, color: "#cfc4a3", marginTop: 4 }}>
           ECEME "Mcal. Andrés de Santa Cruz" · Formativos hasta 120 min · Sumativos más de 300 min
