@@ -875,44 +875,67 @@ function ControlExamenes() {
 
   function generarGrupos() {
     setError("");
-    const clave = claveParalelo(cicloParaleloSel, paraleloSel);
-    const lista = cursantesParalelo[clave] || [];
-    if (lista.length === 0) {
-      setError("No hay cursantes cargados en " + cicloParaleloSel + " · Paralelo " + paraleloSel + ".");
+    const n = Number(grupoNumGrupos) || 1;
+    const resultado = {};
+    let algunaLista = false;
+    ["A", "B", "C"].forEach((par) => {
+      const clave = claveParalelo(cicloParaleloSel, par);
+      const lista = cursantesParalelo[clave] || [];
+      if (lista.length > 0) algunaLista = true;
+      const mezclada = mezclar(lista);
+      const grupos = Array.from({ length: n }, () => []);
+      mezclada.forEach((nombre, i) => grupos[i % n].push(nombre));
+      resultado[par] = grupos;
+    });
+    if (!algunaLista) {
+      setError("No hay cursantes cargados para ningún paralelo de " + cicloParaleloSel + ".");
       return;
     }
-    const n = Number(grupoNumGrupos) || 1;
-    const mezclada = mezclar(lista);
-    const grupos = Array.from({ length: n }, () => []);
-    mezclada.forEach((nombre, i) => grupos[i % n].push(nombre));
-    setGruposResultado({ ciclo: cicloParaleloSel, paralelo: paraleloSel, materiaId: grupoMateriaId, grupos });
+    setGruposResultado({ ciclo: cicloParaleloSel, materiaId: grupoMateriaId, porParalelo: resultado });
   }
 
   function generarPDFGrupos() {
     if (!gruposResultado) return;
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
+    doc.setFont("helvetica");
     const materiaSel = getMateria(gruposResultado.materiaId);
     doc.setFontSize(12);
-    doc.text("ECEME \"Mcal. Andrés de Santa Cruz\"", 14, 15);
+    doc.text('ECEME "Mcal. Andrés de Santa Cruz"', 14, 15);
     doc.setFontSize(10);
-    doc.text("Grupos de trabajo — " + gruposResultado.ciclo + " · Paralelo " + gruposResultado.paralelo, 14, 22);
+    doc.text("Grupos de trabajo — " + gruposResultado.ciclo, 14, 22);
     if (materiaSel) doc.text("Materia: " + materiaSel.materia, 14, 28);
     let y = materiaSel ? 36 : 30;
-    gruposResultado.grupos.forEach((grupo, idx) => {
-      if (y > 270) {
+    ["A", "B", "C"].forEach((par) => {
+      const grupos = gruposResultado.porParalelo[par];
+      if (!grupos || grupos.every((g) => g.length === 0)) return;
+      if (y > 260) {
         doc.addPage();
         y = 20;
       }
-      doc.setFontSize(11);
-      doc.text("Grupo " + (idx + 1), 14, y);
-      y += 6;
-      doc.setFontSize(9);
-      grupo.forEach((nombre) => {
-        doc.text("• " + nombre, 18, y);
-        y += 5;
+      doc.setFontSize(12);
+      doc.text('PARALELO "' + par + '"', 14, y);
+      y += 8;
+      grupos.forEach((grupo, idx) => {
+        if (y > 270) {
+          doc.addPage();
+          y = 20;
+        }
+        doc.setFontSize(11);
+        doc.text("Grupo " + (idx + 1), 14, y);
+        y += 6;
+        doc.setFontSize(9);
+        grupo.forEach((nombre) => {
+          if (y > 280) {
+            doc.addPage();
+            y = 20;
+          }
+          doc.text("• " + nombre, 18, y);
+          y += 5;
+        });
+        y += 4;
       });
-      y += 4;
+      y += 6;
     });
     doc.save("grupos_trabajo.pdf");
   }
@@ -921,23 +944,30 @@ function ControlExamenes() {
     if (!gruposResultado) return;
     const materiaSel = getMateria(gruposResultado.materiaId);
     let html =
+      '<div style="font-family:Arial,sans-serif;">' +
       '<div style="text-align:center;font-weight:bold;">FACULTAD DE CIENCIAS Y ARTES MILITARES TERRESTRES</div>' +
       '<div style="text-align:center;font-weight:bold;">ESCUELA DE COMANDO Y ESTADO MAYOR DEL EJÉRCITO</div>' +
       '<div style="text-align:center;font-weight:bold;">"MCAL. ANDRÉS DE SANTA CRUZ"</div>' +
       '<div style="text-align:center;font-weight:bold;text-decoration:underline;">BOLIVIA</div><br/>' +
-      '<div style="text-align:center;font-weight:bold;">SORTEO DE GRUPOS DE TRABAJO — ' + gruposResultado.ciclo.toUpperCase() + " · PARALELO " + gruposResultado.paralelo + "</div>";
+      '<div style="text-align:center;font-weight:bold;">SORTEO DE GRUPOS DE TRABAJO — ' + gruposResultado.ciclo.toUpperCase() + "</div>";
     if (materiaSel) html += '<div style="text-align:center;">Materia: ' + materiaSel.materia + "</div>";
     html += "<br/>";
-    gruposResultado.grupos.forEach((grupo, idx) => {
-      html += '<div style="font-weight:bold;margin-top:10px;">Grupo ' + (idx + 1) + "</div><ul>";
-      grupo.forEach((nombre) => {
-        html += "<li>" + nombre + "</li>";
+    ["A", "B", "C"].forEach((par) => {
+      const grupos = gruposResultado.porParalelo[par];
+      if (!grupos || grupos.every((g) => g.length === 0)) return;
+      html += '<div style="font-weight:bold;font-size:14px;margin-top:16px;">PARALELO "' + par + '"</div>';
+      grupos.forEach((grupo, idx) => {
+        html += '<div style="font-weight:bold;margin-top:10px;">Grupo ' + (idx + 1) + "</div><ul>";
+        grupo.forEach((nombre) => {
+          html += "<li>" + nombre + "</li>";
+        });
+        html += "</ul>";
       });
-      html += "</ul>";
     });
     html +=
       '<br/><br/><div style="text-align:center;">' + firmaNombrePorCiclo(gruposResultado.ciclo) + "</div>" +
-      '<div style="text-align:center;font-weight:bold;">' + firmaPorCiclo(gruposResultado.ciclo) + "</div>";
+      '<div style="text-align:center;font-weight:bold;">' + firmaPorCiclo(gruposResultado.ciclo) + "</div>" +
+      "</div>";
     descargarWord(html, "grupos_trabajo.doc");
   }
 
@@ -989,6 +1019,7 @@ function ControlExamenes() {
     if (!asientosResultado) return;
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
+    doc.setFont("helvetica");
     let primera = true;
     ["A", "B", "C"].forEach((par) => {
       const filas = asientosResultado.porParalelo[par];
@@ -1022,6 +1053,7 @@ function ControlExamenes() {
   function generarWordAsientos() {
     if (!asientosResultado) return;
     let html =
+      '<div style="font-family:Arial,sans-serif;">' +
       '<div style="text-align:center;font-weight:bold;">FACULTAD DE CIENCIAS Y ARTES MILITARES TERRESTRES</div>' +
       '<div style="text-align:center;font-weight:bold;">ESCUELA DE COMANDO Y ESTADO MAYOR DEL EJÉRCITO</div>' +
       '<div style="text-align:center;font-weight:bold;">"MCAL. ANDRÉS DE SANTA CRUZ"</div>' +
@@ -1052,7 +1084,8 @@ function ControlExamenes() {
     });
     html +=
       '<br/><br/><div style="text-align:center;">' + firmaNombrePorCiclo(asientosResultado.ciclo) + "</div>" +
-      '<div style="text-align:center;font-weight:bold;">' + firmaPorCiclo(asientosResultado.ciclo) + "</div>";
+      '<div style="text-align:center;font-weight:bold;">' + firmaPorCiclo(asientosResultado.ciclo) + "</div>" +
+      "</div>";
     descargarWord(html, "distribucion_asientos.doc");
   }
 
@@ -1870,7 +1903,7 @@ function ControlExamenes() {
           <section style={{ background: parchmentCard, border: "1px solid " + borderCol, borderRadius: 8, padding: "18px 20px", marginBottom: 20 }}>
             <h2 style={{ fontFamily: "Georgia, serif", fontSize: 16, margin: "0 0 12px", color: olive }}>Grupos de trabajo aleatorios</h2>
             <div style={{ fontSize: 12, color: inkMuted, marginBottom: 10 }}>
-              Sorteo independiente por paralelo (usa el Ciclo y Paralelo elegidos arriba: {cicloParaleloSel} · Paralelo {paraleloSel}).
+              Sortea los tres paralelos (A, B y C) del ciclo elegido arriba ({cicloParaleloSel}) en una sola operación, con un sorteo independiente para cada uno.
             </div>
 
             <div className="grid-2" style={{ marginBottom: 10 }}>
@@ -1892,23 +1925,32 @@ function ControlExamenes() {
             </div>
 
             <button onClick={generarGrupos} style={{ background: brass, color: "#fff", border: "none", borderRadius: 5, padding: "8px 14px", fontSize: 13, cursor: "pointer" }}>
-              Sortear grupos
+              Sortear grupos (Paralelos A, B y C)
             </button>
 
             {gruposResultado && (
               <div style={{ marginTop: 16 }}>
                 <div style={{ fontSize: 12, color: inkMuted, marginBottom: 8 }}>
-                  {gruposResultado.ciclo} · Paralelo {gruposResultado.paralelo}
+                  {gruposResultado.ciclo}
                   {getMateria(gruposResultado.materiaId) ? " · " + getMateria(gruposResultado.materiaId).materia : ""}
                 </div>
-                <div style={{ display: "grid", gap: 10 }}>
-                  {gruposResultado.grupos.map((grupo, idx) => (
-                    <div key={idx} style={{ border: "1px solid " + borderCol, borderRadius: 6, padding: 10, background: "#fff" }}>
-                      <div style={{ fontWeight: "bold", fontSize: 13, marginBottom: 6, color: olive }}>Grupo {idx + 1}</div>
-                      <div style={{ fontSize: 13 }}>{grupo.join(", ")}</div>
+                {["A", "B", "C"].map((par) => {
+                  const grupos = gruposResultado.porParalelo[par];
+                  if (!grupos || grupos.every((g) => g.length === 0)) return null;
+                  return (
+                    <div key={par} style={{ marginBottom: 16 }}>
+                      <div style={{ fontWeight: "bold", color: olive, marginBottom: 8 }}>Paralelo {par}</div>
+                      <div style={{ display: "grid", gap: 10 }}>
+                        {grupos.map((grupo, idx) => (
+                          <div key={idx} style={{ border: "1px solid " + borderCol, borderRadius: 6, padding: 10, background: "#fff" }}>
+                            <div style={{ fontWeight: "bold", fontSize: 13, marginBottom: 6, color: olive }}>Grupo {idx + 1}</div>
+                            <div style={{ fontSize: 13 }}>{grupo.join(", ")}</div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  ))}
-                </div>
+                  );
+                })}
                 <div style={{ display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap" }}>
                   <button onClick={generarPDFGrupos} style={{ background: olive, color: "#fff", border: "none", borderRadius: 5, padding: "8px 14px", fontSize: 13, cursor: "pointer" }}>
                     Descargar PDF
