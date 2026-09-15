@@ -47,6 +47,9 @@ const STORAGE_KEY_PERSONAL = "control-examenes:personal";
 const STORAGE_KEY_REGISTROS = "control-examenes:registros";
 const STORAGE_KEY_MENSAJE_CONFIG = "control-examenes:mensajeConfig";
 const STORAGE_KEY_PROFESORES_MATERIA = "control-examenes:profesoresMateria";
+const STORAGE_KEY_DOCENTES = "control-examenes:docentes";
+const STORAGE_KEY_MATERIAS = "control-examenes:materias";
+const STORAGE_KEY_CURSANTES = "control-examenes:cursantesParalelo";
 
 // ============================================================
 // CONFIGURACIÓN DE FIREBASE (para compartir datos entre celulares)
@@ -100,44 +103,23 @@ const PERSONAL_INICIAL = [
   { grado: "My. DEM.", nombre: "Juan Marcelo Torrico Luizaga" },
 ].map((p, i) => ({ id: "p" + i, nombre: p.grado + " " + p.nombre }));
 
-const MATERIAS_ORDEN = [
+const MATERIAS_INICIAL = [
   { n: 1, track: "1ER. CICLO", materia: "FORMACIÓN DE COMANDANTES (TS-LM-FC-01)" },
-  { n: 2, track: "2DO. CICLO", materia: "GENERALIDADES DE LA ESTRATEGIA NACIONAL (EM-EN-GE-01)" },
   { n: 3, track: "1ER. CICLO", materia: "ACCIÓN DE MANDO Y LIDERAZGO (TS-LM-AM-02)" },
-  { n: 4, track: "ESTRATEGIA", materia: "CONCEPCIÓN DE LA ESTRATEGIA MILITAR (EM-ME-CE-01)" },
-  { n: 5, track: "INTELIGENCIA", materia: "ESTUDIOS DE INTELIGENCIA ESTRATÉGICA MILITAR (EM-MI-EI-01)" },
-  { n: 6, track: "LOGÍSTICA", materia: "TEORÍA DE LA LOGÍSTICA EN LA ESTRATEGIA MILITAR (EM-ML-TL-01)" },
-  { n: 7, track: "RECURSOS HUMANOS", materia: "DESARROLLO Y ESTRUCTURA ORGANIZACIONAL (EM-MR-EO-01)" },
   { n: 8, track: "1ER. CICLO", materia: "HISTORIA MILITAR APLICADA I (TS-EM-HM-01)" },
-  { n: 9, track: "ESTRATEGIA", materia: "CONDUCCIÓN DE LA ESTRATEGIA MILITAR (EM-ME-CE-02)" },
-  { n: 10, track: "INTELIGENCIA", materia: "ANÁLISIS DE LA AMENAZA Y EL PODER MILITAR (EM-MI-AA-02)" },
-  { n: 11, track: "LOGÍSTICA", materia: "DIVISIÓN TERRITORIAL (EM-ML-DT-02)" },
-  { n: 12, track: "RECURSOS HUMANOS", materia: "DESARROLLO HUMANO (LAS PERSONAS Y LAS ORGANIZACIONES) (EM-MR-DH-02)" },
-  { n: 13, track: "ESTRATEGIA", materia: "SEGURIDAD ESTRATÉGICA (EM-ME-SE-03)" },
-  { n: 14, track: "INTELIGENCIA", materia: "ANÁLISIS Y PREDICCIÓN (EM-MI-AP-03)" },
-  { n: 15, track: "LOGÍSTICA", materia: "COMANDOS Y ATRIBUCIONES (EM-ML-CA-03)" },
-  { n: 16, track: "RECURSOS HUMANOS", materia: "GESTIÓN DE RECURSOS HUMANOS" },
   { n: 17, track: "1ER. CICLO", materia: "DERECHO INTERNACIONAL DE LOS CONFLICTOS ARMADOS (TS-EM-DI-02)" },
-  { n: 18, track: "ESTRATEGIA", materia: "CONSTITUCIÓN Y EQUIPAMIENTO DEL TEATRO DE OPERACIONES (EM-ME-CE-04)" },
-  { n: 19, track: "INTELIGENCIA", materia: "PROCESO DE PRODUCCIÓN DE INTELIGENCIA ESTRATÉGICA (EM-MI-PI-04)" },
-  { n: 20, track: "LOGÍSTICA", materia: "LA LOGÍSTICA EN EL NIVEL ESTRATÉGICO MILITAR (EM-ML-LN-04)" },
-  { n: 21, track: "RECURSOS HUMANOS", materia: "RELACIÓN ENTRE LAS PERSONAS Y LAS ORGANIZACIONES" },
-  { n: 22, track: "1ER. CICLO", materia: "GUERRAS DE 4TA GENERACIÓN - TEORÍA Y BASES DE LA GUERRA ASIMÉTRICA – GUERRA SIN RESTRICCIÓN Y GUERRA HIBRIDA (TS-EM-GC-03)" },
-  { n: 23, track: "ESTRATEGIA", materia: "MOVILIZACIÓN, CONCENTRACIÓN Y DESPLIEGUE ESTRATÉGICO (EM-ME-MC-05)" },
-  { n: 24, track: "INTELIGENCIA", materia: "PROSPECTIVA ESTRATÉGICA (EM-MI-PE-05)" },
-  { n: 25, track: "LOGÍSTICA", materia: "LA LOGÍSTICA EN APOYO AL EQUIPAMIENTO DEL TEATRO DE OPERACIONES (EM-ML-LA-05)" },
-  { n: 26, track: "RECURSOS HUMANOS", materia: "PLANIFICACIÓN ESTRATÉGICA DE LOS RR.HH. (EM-MR-PE-05)" },
-  { n: 27, track: "1ER. CICLO", materia: "DOCTRINA DE PATRIOTAS (TS-EM-DP-04)" },
+  { n: 22, track: "1ER. CICLO", materia: "GUERRAS DE 4TA GENERACIÓN - TEORÍA Y BASES DE LA GUERRA ASIMÉTRICA – GUERRA SIN RESTRICCIÓN Y GUERRA HIBRIDA. (TS-EM-GC-03)" },
+  { n: 27, track: "1ER. CICLO", materia: "DOCTRINA DE PATRIOTAS. (TS-EM-DP-04)" },
   { n: 28, track: "2DO. CICLO", materia: "PROCEDIMIENTOS LEGALES PARA LA ADMINISTRACIÓN DE LAS UNIDADES MILITARES (EM-MR-PL-05)" },
   { n: 29, track: "2DO. CICLO", materia: "ESTUDIO DE ESTADO MAYOR (EM-AU-EE-01)" },
-  { n: 30, track: "1ER. CICLO", materia: "TEORÍA DE LAS ARMAS COMBINADAS (TS-PC-TA-01)" },
+  { n: 30, track: "1ER. CICLO", materia: "TEORÍA DE LAS ARMAS COMBINADAS. (TS-PC-TA-01)" },
   { n: 31, track: "2DO. CICLO", materia: "SUMARIOS INFORMATIVOS (EM-AU-SI-02)" },
   { n: 32, track: "1ER. CICLO", materia: "TEORÍA Y CONDUCCIÓN DE LAS GG. UU. BB. (TS-PC-TC-02)" },
   { n: 33, track: "2DO. CICLO", materia: "ELABORACIÓN DE PLANES (EM-AU-EP-03)" },
   { n: 34, track: "1ER. CICLO", materia: "LA LOGÍSTICA EN LAS GG. UU. BB. (TS-PC-LG-03)" },
   { n: 35, track: "2DO. CICLO", materia: "FORMULACIÓN Y EVALUACIÓN DE PROYECTOS (EM-AU-FE-01)" },
   { n: 36, track: "1ER. CICLO", materia: "PROCESO DE PLANEAMIENTO II (TS-PC-PP-04)" },
-  { n: 37, track: "2DO. CICLO", materia: "ELABORACIÓN DEL POA (EM-AU-EP-02)" },
+  { n: 37, track: "2DO. CICLO", materia: "ELABORACIÓN DEL POA. (EM-AU-EP-02)" },
   { n: 38, track: "2DO. CICLO", materia: "ADMINISTRACIÓN FINANCIERA DE UNIDADES (EM-AU-AF-03)" },
 ].map((m) => ({
   id: "m" + m.n,
@@ -146,6 +128,245 @@ const MATERIAS_ORDEN = [
   materia: m.materia,
   ciclo: m.track === "1ER. CICLO" ? "1er Ciclo" : "2do Ciclo",
 }));
+
+const CURSANTES_INICIAL = {
+  "1er Ciclo|A": [
+    "My. Art. Jose Luis Copa Flores",
+    "My. Inf. Armin Soliz Catari",
+    "My. Inf. Ivert Cristian Santa Maria Castro",
+    "My. Com. Carola Roxana Limachi Aguilar",
+    "My. Inf. Juan Gabriel Ríos Martínez",
+    "My. Art. Dietmar David Cueto Ramallo",
+    "My. Cab. Alan Marcelo Zabala Villegas",
+    "My. Inf. Fabio Esteban Arce Velásquez",
+    "My. Inf. Socrates Flores Paz",
+    "My. Inf. Yamil Vladimir Cuiza Pacheco",
+    "My. Inf. Rodolfo Choque Mamani",
+    "My. Inf. Erick Henry Luque Surco",
+    "My. Art. Juan De Dios Gonzales Gutierrez",
+    "My. Art. Percy Hurtado Villca",
+    "My. Art. Jhonny Wilder Gonzales Acha",
+    "My. Inf. Lisbeth Vanessa Vila Banegas",
+    "My. Inf. Raul Perez Medrano",
+    "My. Cab. Erick Fernando Balderrama Ayala",
+    "My. Inf. Juan Carlos Ricaldi Nuñez",
+    "My. Inf. Luis Alberto López",
+    "My. Inf. Melba Valeria Cepcel Mendoza",
+    "My. Ing. Ciscar Efrain Giron Heredia",
+    "My. Art. Walter Crhistian Gonzales La Fuente",
+    "My. Inf. Juan Israel Aguilar Taborga",
+    "My. Inf. Richard Ayala Rivamontan",
+    "My. Cab. Cesar Fernando Chugar Ayala",
+    "My. Art. Ruben Callizaya Ayala",
+    "My. Cab. Edson Wilder Loza Quiroga",
+    "My. Art. David Junior Pardo Mejia",
+    "My. Art. Reyna Norka Loza Alonzo",
+    "My. Inf. Arturo Cordova Patzy",
+    "My. Art. Edson Daniel Soliz Caceres",
+    "My. Inf. Jorge Luis Calavi Soria",
+    "My. Ing. Ninoska Del Rosario Altamirano Llampa",
+    "My. Com. Wendy Sofia Avendaño Oros",
+    "My. Inf. Gonzalo Guevara Revollo",
+    "My. Cab. Pablo Cesar Salces Leaños",
+    "My. Inf. Beto Torrico Peredo",
+    "My. Inf. Gilder Diego Choque Callisaya",
+    "My. Ep. Yelkin Snorri Valenzuela Arenas",
+    "My. Ep. Diana Zumaeta Urcariegui",
+    "My. Ep. César Augusto Bahamonde Centeno",
+  ],
+  "1er Ciclo|B": [
+    "My. Art. Rubén Ariel Alcón Cahuana",
+    "My. Art. Johonatan Torrico Cuevas",
+    "My. Inf. Daniel Alejandro Tococari Fiorilo",
+    "My. Inf. Pedro Fernando Rocabado Montenegro",
+    "My. Inf. José Antonio Pozo Valdivia",
+    "My. Inf. Daniel Andres Ortiz Cordero",
+    "My. Inf. Jhonatan Raúl Guzmán Jiménez",
+    "My. Cab. Yury Alejandra Revollo Solíz",
+    "My. Inf. Jesus Zenon Canaviri Mollo",
+    "My. Ing. Luis Daniel Chinche Guzmán",
+    "My. Cab. Berman Palacios Alcoba",
+    "My. Inf. Freddy Edoard Luján Ticona",
+    "My. Ing. Elmer Adolfo Flores Marquez",
+    "My. Inf. Ariel Guarayo Roque",
+    "My. Log. Carlos Alfonso Cocarico Jáuregui",
+    "My. Inf. Ruben Dario Céspedes Rocha",
+    "My. Inf. Darwin Daniel Gonzales Choque",
+    "My. Inf. Marco Antonio Uruño Choque",
+    "My. Inf. Gilmar Quispe Condori",
+    "My. Ing. Katian Shirley Limachi Quispe",
+    "My. Inf. Jorge Sánchez Olivera",
+    "My. Inf. Justino Franz Choque Alfaro",
+    "My. Log. Nelson Luizaga Claure",
+    "My. Art. Erik Jhonatan Terrazas Mollo",
+    "My. Cab. Alvaro Martin Avendaño Lara",
+    "My. Art. Jorge Luis Pally Montaño",
+    "My. Inf. Jose Edilberto Quiroz Barboza",
+    "My. Inf. Ariel Lodis Leon Vaca",
+    "My. Com. Roscio Nataly Rocabado Torrico",
+    "My. Inf. Galo Maldonado",
+    "My. Inf. Williams Edgar Lopez Condori",
+    "My. Cab. Juan Carlos Lira Ortiz",
+    "My. Art. Tatiana Espada Soliz",
+    "My. Inf. Danny Garcia Ayala",
+    "My. Log. Claribel Calcina Añez",
+    "My. Cab. Liseth Carmen Blanco Fernandez",
+    "My. Log. Paula Alejandra Galindo Balderrama",
+    "My. Inf. Joseph Salcedo Sullk",
+    "My. Cab. Luis Fernando Torrez Ramos",
+    "My. Inf. Fernando Ricardo Palma Frias",
+    "My. Cab. Jose Alberto Meneces Jaldin",
+    "My. Ep. Carlos Jesús Guzmán Poma",
+  ],
+  "1er Ciclo|C": [
+    "My. Art. Walter Michael Azaeda Herrera",
+    "My. Inf. David Alejandro Lozano Arce",
+    "My. Inf. Victor Aracayo Pampa",
+    "My. Inf. Harry Rodrigo Vela Mercado",
+    "My. Art. Saul Belmonte Sánchez",
+    "My. Inf. Mijael Yamil Mariscal Hidalgo",
+    "My. Inf. Jose Antonio Barrientos Rico",
+    "My. Inf. Mario Huañapaco Alcon",
+    "My. Inf. Camilo Vasquez Balderrama",
+    "My. Log. Rocio Katerine Herrera Balderrama",
+    "My. Art. Adhemar Cazas Martinez",
+    "My. Ing. Saul Duran Rueda",
+    "My. Com. Boris Reynaldo Espinoza Cardenas",
+    "My. Inf. Erik Luis Tadeo Huaylla",
+    "My. Inf. Luis Gonzalo Chavez Quispe",
+    "My. Com. Roger Ricardo Huaynoca Coacollo",
+    "My. Inf. Jhosef Alvaro Flores Ramirez",
+    "My. Ing. Ever Rodo Murillo Lopez",
+    "My. Cab. Franz Edwar Villca Mayta",
+    "My. Inf. Allyson Manu Salguero",
+    "My. Inf. Carlos Alberto Fuentes Nina",
+    "My. Art. Anghelo Franz Lima Molina",
+    "My. Inf. Osmar Alfonzo Ruiz Suxo",
+    "My. Inf. Juan Heljar Quispe Atahuachi",
+    "My. Cab. Ronald Mauricio Sandoval Rojas",
+    "My. Art. Freddy Francisco Medina Torrico",
+    "My. Art. Luis Alejandro Cossio Cossio",
+    "My. Art. Luis Fernando Ochoa Pacheco",
+    "My. Com. Teddy Gustavo Zurita Luján",
+    "My. Art. Duveiza Antonieta Montaño Pinto",
+    "My. Inf. Pablo Cesar Peñaloza Aguila",
+    "My. Inf. Jaime Jose Choquehuanca Quispe",
+    "My. Inf. Ramiro Mauricio Aguilar Teran",
+    "My. Inf. Ilse Barrientos Fernández",
+    "My. Art. Javier Morales Poma",
+    "My. Inf. Juan Pablo Villa Nuñez",
+    "My. Inf. Amilcar Christian Veizaga Balta",
+    "My. Com. Yanka Ammi Barron Capiona",
+    "My. Art. Jorge Armando Garcia Salvatierra",
+    "My. Inf. Lorgio Garcia Gamboa",
+    "My. Ep. Samuel Romani Jacobe",
+  ],
+  "2do Ciclo|A": [
+    "My. Cab. Abuna Alarcon Alvaro Jose",
+    "My. Log. Altamirano Cava Christian Eduardo",
+    "My. Ing. Barrientos Llanos Maria Luisa",
+    "My. Cab. Calderon Cartagena Aldo Mauricio",
+    "My. Inf. Camacho Orellana Eignar Oscar",
+    "My. Inf. Careaga Tellez Maikol Fernando",
+    "My. Cab. Carvajal Maldonado Carlos Andres",
+    "My. Cab. Carvajal Salinas Alan Sven",
+    "My. Art. Cespedes Rocha Jorge Armando",
+    "My. Inf. Chavarria Villegas Lejandro Wilde",
+    "My. Inf. Contreras Sanchez Willams Tonio",
+    "My. Ing. Covarrubias Garcia Lupe",
+    "My. Inf. Cruz Yaibona Jose Luis Marcelo",
+    "My. Inf. Espinoza Fernandez Eloy Jorge",
+    "My. Art. Gironda Porrez Oscar Reynaldo",
+    "My. Inf. Leonardini Uriona Ruben Orlando",
+    "My. Inf. Macias Balderrama Diego Ronald",
+    "My. Cab. Mendieta Montero Gabriel",
+    "My. Inf. Palacios Molina Roger Tomas",
+    "My. Cab. Parrado Claros Dennys Jorge",
+    "My. Inf. Pecho Quiroz Danton Bereniz",
+    "My. Inf. Pereira Arevalo Brayan Alberto",
+    "My. Com. Portuguez Jilamita Shirley",
+    "My. Inf. Quiroga Jordan Manuel Jaime",
+    "My. Art. Quisbert Ticona Juan Pablo",
+    "My. Ing. Rojas Catacora Jhon Henry",
+    "My. Art. Romero Sandoval Carlos Alberto",
+    "My. Cab. Salazar Suarez Guido Grover",
+    "My. Inf. Soria Uriona Rodney Jenner",
+    "My. Inf. Teran Castro Juan Pablo",
+    "My. Log. Valero Laura Franklin Ivan",
+    "My. Log. Vargas Balderrama Jandery",
+    "My. Art. Villarroel Herbas Dennis",
+  ],
+  "2do Ciclo|B": [
+    "My. Inf. Aguilar Taborga Ciro Faustino",
+    "My. Inf. Arancibia Tapia Gehain Osmar",
+    "My. Inf. Arumbari Ruiz Elias Max",
+    "My. Inf. Ayala Zurita Franz",
+    "My. Inf. Bravo Calle Boris Alejandro",
+    "My. Inf. Cahuaya Vino Vladimir Edwin",
+    "My. Cab. Cardozo Quiroga Rommel",
+    "My. Inf. Castro Salazar Julio Cesar",
+    "My. Art. Choque Azari Rodolfo",
+    "My. Cab. Cordero Zapata Marco Antonio",
+    "My. Art. Cortez Gutierrez Jose Antonio",
+    "My. Art. Espinoza Vaca Sergio Rubens",
+    "My. Inf. Fernandez Bustamante Samuel Erick",
+    "My. Inf. Fernandez Villa Yamil Wilfredo",
+    "My. Inf. Flores Benavides Cristian",
+    "My. Cab. Flores Cabrera Alejandro",
+    "My. Inf. Gareca Rodriguez Daniel Enrique",
+    "My. Art. Gómez Campos Alexander",
+    "My. Log. Guevara Revollo Paola Valeria",
+    "My. Inf. Lopez Aranda Luis Alberto",
+    "My. Ing. Mendizabal Chura Henry",
+    "My. Art. Mercado Carrasco Marco Antonio",
+    "My. Cab. Merubia Paredes José Antonio",
+    "My. Log. Ovalle Quisbert Luisa Krupskaya",
+    "My. Inf. Prudencio Ramallo Willy Andrey",
+    "My. Log. Rocha Luna Lin Nair",
+    "My. Inf. Rosales Saravia Sergio Orlando",
+    "My. Inf. Salazar Vargas John Wilmar",
+    "My. Inf. Sejas Velasco Pablo Antonio",
+    "My. Inf. Usmayo Apaza Marlon Efrain",
+    "My. Art. Vargas Gutierrez Harold Henry",
+    "My. Inf. Vasquez Ojopi Jean Carlo",
+    "My. Log. Vidaurre Vasquez Romanett",
+  ],
+  "2do Ciclo|C": [
+    "My. Art. Aguilera Torrez Fernando",
+    "My. Cab. Angulo Aduviri Alvaro Jose",
+    "My. Cab. Arrazola Adriazola Carlos Antonio",
+    "My. Cab. Balboa Quispe Ronald Raul",
+    "My. Cab. Barea Cuba Armando",
+    "My. Ing. Barra Yucra Jilma Elvira",
+    "My. Inf. Barral Lopez Liliana Sandra",
+    "My. Inf. Bautista Torrez Ivan Alejandro",
+    "My. Inf. Calderon Fernandez Wilmer",
+    "My. Art. Calle Silva Luis Mauro",
+    "My. Inf. Camacho Pinto Demely Enrique",
+    "My. Inf. Choque Apaza Luis Fernando",
+    "My. Art. Claros Mustafa Rodrigo Said",
+    "My. Cab. Curcuy Espinar Jorge Oscar",
+    "My. Cab. Daza Calvimonte Alberto Rodrigo",
+    "My. Inf. Daza Rafael Mario Frederick",
+    "My. Inf. Fernandez Zeballos Franz Freddy",
+    "My. Inf. Gonzales Barrera Miguel Antonio",
+    "My. Inf. Gonzales Mollinedo Wilson Gonzalo",
+    "My. Inf. Herrera Avalos Richard William",
+    "My. Inf. Luizaga Gutierrez Victor Edwin",
+    "My. Com. Marconi Quino Hady Walker",
+    "My. Inf. Ramirez Sanchez Iver Adhemar",
+    "My. Art. Ricalde Torrez Juan Pablo",
+    "My. Com. Rojas Loza Wenddy Romanet",
+    "My. Inf. Saavedra Delgado Julio Alberto",
+    "My. Log. Sanchez Sillo Karla Carmen",
+    "My. Inf. Santa Cruz Sandoval Guery Marcelo",
+    "My. Inf. Taboada Jove Jaime Alberto",
+    "My. Inf. Torrico Yañez Raul Eduardo",
+    "My. Cab. Valdivia Rowe Marcelo Gabriel",
+    "My. Inf. Vargas Colosetti Renzo Gustavo",
+    "My. Cab. Zeballos Pacheco Ruben Fernando",
+  ],
+};
 
 const uid = () => Math.random().toString(36).slice(2, 10);
 
@@ -201,6 +422,8 @@ async function storageSet(key, value) {
 
 function ControlExamenes() {
   const [personal, setPersonal] = useState([]);
+  const [docentes, setDocentes] = useState([]);
+  const [materias, setMaterias] = useState([]);
   const [registros, setRegistros] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -208,6 +431,9 @@ function ControlExamenes() {
   const [usandoNube, setUsandoNube] = useState(false);
 
   const [nuevoNombre, setNuevoNombre] = useState("");
+  const [textoLotePersonal, setTextoLotePersonal] = useState("");
+  const [nuevoDocente, setNuevoDocente] = useState("");
+  const [textoLoteDocentes, setTextoLoteDocentes] = useState("");
   const [filtroCiclo, setFiltroCiclo] = useState("Todos");
 
   const [form, setForm] = useState({
@@ -218,6 +444,28 @@ function ControlExamenes() {
     tipo: "Evaluación formativa",
     apoyos: [],
   });
+
+  const [nuevaMateriaCiclo, setNuevaMateriaCiclo] = useState("1er Ciclo");
+  const [nuevaMateriaTrack, setNuevaMateriaTrack] = useState("1ER. CICLO");
+  const [nuevaMateriaNombre, setNuevaMateriaNombre] = useState("");
+  const [materiaEditId, setMateriaEditId] = useState(null);
+  const [materiaEditTexto, setMateriaEditTexto] = useState("");
+
+  const [cursantesParalelo, setCursantesParalelo] = useState({});
+  const [cicloParaleloSel, setCicloParaleloSel] = useState("1er Ciclo");
+  const [paraleloSel, setParaleloSel] = useState("A");
+  const [nuevoCursante, setNuevoCursante] = useState("");
+  const [textoLoteCursantes, setTextoLoteCursantes] = useState("");
+
+  const [activeTab, setActiveTab] = useState("comite");
+
+  const [grupoMateriaId, setGrupoMateriaId] = useState("");
+  const [grupoNumGrupos, setGrupoNumGrupos] = useState(5);
+  const [gruposResultado, setGruposResultado] = useState(null);
+
+  const [asientosFecha, setAsientosFecha] = useState("");
+  const [asientosNumCols, setAsientosNumCols] = useState(4);
+  const [asientosResultado, setAsientosResultado] = useState(null);
 
   const MESES = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
   const ROLES_DEFECTO = {
@@ -245,16 +493,19 @@ function ControlExamenes() {
   }
 
   function getMateria(id) {
-    return MATERIAS_ORDEN.find((m) => m.id === id) || null;
+    return materias.find((m) => m.id === id) || null;
   }
 
   useEffect(() => {
     if (fbDb) {
       setUsandoNube(true);
       const refPersonal = fbDb.ref(STORAGE_KEY_PERSONAL);
+      const refDocentes = fbDb.ref(STORAGE_KEY_DOCENTES);
+      const refMaterias = fbDb.ref(STORAGE_KEY_MATERIAS);
       const refRegistros = fbDb.ref(STORAGE_KEY_REGISTROS);
       const refMensaje = fbDb.ref(STORAGE_KEY_MENSAJE_CONFIG);
       const refProfesores = fbDb.ref(STORAGE_KEY_PROFESORES_MATERIA);
+      const refCursantes = fbDb.ref(STORAGE_KEY_CURSANTES);
 
       const cbPersonal = (snap) => {
         const val = snap.val();
@@ -265,21 +516,46 @@ function ControlExamenes() {
           refPersonal.set(PERSONAL_INICIAL);
         }
       };
+      const cbDocentes = (snap) => setDocentes(snap.val() || []);
+      const cbMaterias = (snap) => {
+        const val = snap.val();
+        if (val) {
+          setMaterias(val);
+        } else {
+          setMaterias(MATERIAS_INICIAL);
+          refMaterias.set(MATERIAS_INICIAL);
+        }
+      };
       const cbRegistros = (snap) => setRegistros(snap.val() || []);
       const cbMensaje = (snap) => setRolesConfig(snap.val() || ROLES_DEFECTO);
       const cbProfesores = (snap) => setProfesoresPorMateria(snap.val() || {});
+      const cbCursantes = (snap) => {
+        const val = snap.val();
+        if (val && Object.keys(val).length > 0) {
+          setCursantesParalelo(val);
+        } else {
+          setCursantesParalelo(CURSANTES_INICIAL);
+          refCursantes.set(CURSANTES_INICIAL);
+        }
+      };
 
       refPersonal.on("value", cbPersonal);
+      refDocentes.on("value", cbDocentes);
+      refMaterias.on("value", cbMaterias);
       refRegistros.on("value", cbRegistros);
       refMensaje.on("value", cbMensaje);
       refProfesores.on("value", cbProfesores);
+      refCursantes.on("value", cbCursantes);
       setLoading(false);
 
       return () => {
         refPersonal.off("value", cbPersonal);
+        refDocentes.off("value", cbDocentes);
+        refMaterias.off("value", cbMaterias);
         refRegistros.off("value", cbRegistros);
         refMensaje.off("value", cbMensaje);
         refProfesores.off("value", cbProfesores);
+        refCursantes.off("value", cbCursantes);
       };
     }
 
@@ -288,6 +564,8 @@ function ControlExamenes() {
         setSinAlmacenPersistente(true);
       }
       const p = await storageGet(STORAGE_KEY_PERSONAL);
+      const doc = await storageGet(STORAGE_KEY_DOCENTES);
+      const mat = await storageGet(STORAGE_KEY_MATERIAS);
       const r = await storageGet(STORAGE_KEY_REGISTROS);
       if (p) {
         try {
@@ -298,6 +576,23 @@ function ControlExamenes() {
       } else {
         setPersonal(PERSONAL_INICIAL);
         await storageSet(STORAGE_KEY_PERSONAL, JSON.stringify(PERSONAL_INICIAL));
+      }
+      if (doc) {
+        try {
+          setDocentes(JSON.parse(doc));
+        } catch (e) {
+          setDocentes([]);
+        }
+      }
+      if (mat) {
+        try {
+          setMaterias(JSON.parse(mat));
+        } catch (e) {
+          setMaterias(MATERIAS_INICIAL);
+        }
+      } else {
+        setMaterias(MATERIAS_INICIAL);
+        await storageSet(STORAGE_KEY_MATERIAS, JSON.stringify(MATERIAS_INICIAL));
       }
       if (r) {
         try {
@@ -321,6 +616,23 @@ function ControlExamenes() {
         } catch (e) {
           setProfesoresPorMateria({});
         }
+      }
+      const cp = await storageGet(STORAGE_KEY_CURSANTES);
+      if (cp) {
+        try {
+          const parsed = JSON.parse(cp);
+          if (parsed && Object.keys(parsed).length > 0) {
+            setCursantesParalelo(parsed);
+          } else {
+            setCursantesParalelo(CURSANTES_INICIAL);
+            await storageSet(STORAGE_KEY_CURSANTES, JSON.stringify(CURSANTES_INICIAL));
+          }
+        } catch (e) {
+          setCursantesParalelo(CURSANTES_INICIAL);
+        }
+      } else {
+        setCursantesParalelo(CURSANTES_INICIAL);
+        await storageSet(STORAGE_KEY_CURSANTES, JSON.stringify(CURSANTES_INICIAL));
       }
       setLoading(false);
     })();
@@ -377,8 +689,367 @@ function ControlExamenes() {
     setNuevoNombre("");
   }
 
+  function agregarPersonalEnLote(texto) {
+    const nombresNuevos = texto.split("\n").map((n) => n.trim()).filter(Boolean);
+    if (nombresNuevos.length === 0) return;
+    const actualesLower = personal.map((p) => p.nombre.toLowerCase());
+    const combinados = personal.slice();
+    nombresNuevos.forEach((n) => {
+      if (!actualesLower.includes(n.toLowerCase())) {
+        combinados.push({ id: uid(), nombre: n });
+        actualesLower.push(n.toLowerCase());
+      }
+    });
+    guardarPersonal(combinados);
+    setTextoLotePersonal("");
+  }
+
   function quitarPersona(id) {
     guardarPersonal(personal.filter((p) => p.id !== id));
+  }
+
+  async function guardarDocentes(next) {
+    return guardarDato(STORAGE_KEY_DOCENTES, next, setDocentes);
+  }
+
+  function agregarDocente() {
+    const nombre = nuevoDocente.trim();
+    if (!nombre) return;
+    if (docentes.some((d) => d.nombre.toLowerCase() === nombre.toLowerCase())) {
+      setNuevoDocente("");
+      return;
+    }
+    guardarDocentes([...docentes, { id: uid(), nombre }]);
+    setNuevoDocente("");
+  }
+
+  function agregarDocentesEnLote(texto) {
+    const nombresNuevos = texto.split("\n").map((n) => n.trim()).filter(Boolean);
+    if (nombresNuevos.length === 0) return;
+    const actualesLower = docentes.map((d) => d.nombre.toLowerCase());
+    const combinados = docentes.slice();
+    nombresNuevos.forEach((n) => {
+      if (!actualesLower.includes(n.toLowerCase())) {
+        combinados.push({ id: uid(), nombre: n });
+        actualesLower.push(n.toLowerCase());
+      }
+    });
+    guardarDocentes(combinados);
+    setTextoLoteDocentes("");
+  }
+
+  function quitarDocente(id) {
+    guardarDocentes(docentes.filter((d) => d.id !== id));
+  }
+
+  async function guardarMaterias(next) {
+    return guardarDato(STORAGE_KEY_MATERIAS, next, setMaterias);
+  }
+
+  function agregarMateria() {
+    const nombre = nuevaMateriaNombre.trim();
+    if (!nombre) return;
+    const siguienteN = materias.length ? Math.max(...materias.map((m) => m.n || 0)) + 1 : 1;
+    const nueva = {
+      id: uid(),
+      n: siguienteN,
+      track: nuevaMateriaTrack,
+      materia: nombre,
+      ciclo: nuevaMateriaCiclo,
+    };
+    guardarMaterias([...materias, nueva]);
+    setNuevaMateriaNombre("");
+  }
+
+  function quitarMateria(id) {
+    guardarMaterias(materias.filter((m) => m.id !== id));
+  }
+
+  function iniciarEdicionMateria(m) {
+    setMateriaEditId(m.id);
+    setMateriaEditTexto(m.materia);
+  }
+
+  function guardarEdicionMateria(id) {
+    const texto = materiaEditTexto.trim();
+    if (!texto) return;
+    guardarMaterias(materias.map((m) => (m.id === id ? { ...m, materia: texto } : m)));
+    setMateriaEditId(null);
+    setMateriaEditTexto("");
+  }
+
+  function moverMateria(id, direccion) {
+    const idx = materias.findIndex((m) => m.id === id);
+    if (idx === -1) return;
+    const nuevoIdx = idx + direccion;
+    if (nuevoIdx < 0 || nuevoIdx >= materias.length) return;
+    const copia = materias.slice();
+    const tmp = copia[idx];
+    copia[idx] = copia[nuevoIdx];
+    copia[nuevoIdx] = tmp;
+    guardarMaterias(copia);
+  }
+
+  async function guardarCursantesParalelo(next) {
+    return guardarDato(STORAGE_KEY_CURSANTES, next, setCursantesParalelo);
+  }
+
+  function claveParalelo(ciclo, paralelo) {
+    return ciclo + "|" + paralelo;
+  }
+
+  function agregarCursante() {
+    const nombre = nuevoCursante.trim();
+    if (!nombre) return;
+    const clave = claveParalelo(cicloParaleloSel, paraleloSel);
+    const actuales = cursantesParalelo[clave] || [];
+    if (actuales.some((n) => n.toLowerCase() === nombre.toLowerCase())) {
+      setNuevoCursante("");
+      return;
+    }
+    guardarCursantesParalelo({ ...cursantesParalelo, [clave]: [...actuales, nombre] });
+    setNuevoCursante("");
+  }
+
+  function agregarCursantesEnLote(texto) {
+    const nombresNuevos = texto
+      .split("\n")
+      .map((n) => n.trim())
+      .filter(Boolean);
+    if (nombresNuevos.length === 0) return;
+    const clave = claveParalelo(cicloParaleloSel, paraleloSel);
+    const actuales = cursantesParalelo[clave] || [];
+    const actualesLower = actuales.map((n) => n.toLowerCase());
+    const combinados = actuales.slice();
+    nombresNuevos.forEach((n) => {
+      if (!actualesLower.includes(n.toLowerCase())) {
+        combinados.push(n);
+        actualesLower.push(n.toLowerCase());
+      }
+    });
+    guardarCursantesParalelo({ ...cursantesParalelo, [clave]: combinados });
+    setTextoLoteCursantes("");
+  }
+
+  function quitarCursante(nombre) {
+    const clave = claveParalelo(cicloParaleloSel, paraleloSel);
+    const actuales = cursantesParalelo[clave] || [];
+    guardarCursantesParalelo({ ...cursantesParalelo, [clave]: actuales.filter((n) => n !== nombre) });
+  }
+
+  function mezclar(lista) {
+    const copia = lista.slice();
+    for (let i = copia.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = copia[i];
+      copia[i] = copia[j];
+      copia[j] = tmp;
+    }
+    return copia;
+  }
+
+  function firmaPorCiclo(ciclo) {
+    return ciclo === "1er Ciclo" ? "JEFE DE CURSO DE 1ER. CICLO ECEME." : "EVALUADOR 2DO. CICLO ECEME.";
+  }
+
+  function descargarWord(html, nombreArchivo) {
+    const contenido =
+      '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">' +
+      '<head><meta charset="utf-8"></head><body>' + html + "</body></html>";
+    const blob = new Blob(["\ufeff", contenido], { type: "application/msword" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = nombreArchivo;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 3000);
+  }
+
+  // --- Grupos de trabajo aleatorios ---
+
+  function generarGrupos() {
+    setError("");
+    const clave = claveParalelo(cicloParaleloSel, paraleloSel);
+    const lista = cursantesParalelo[clave] || [];
+    if (lista.length === 0) {
+      setError("No hay cursantes cargados en " + cicloParaleloSel + " · Paralelo " + paraleloSel + ".");
+      return;
+    }
+    const n = Number(grupoNumGrupos) || 1;
+    const mezclada = mezclar(lista);
+    const grupos = Array.from({ length: n }, () => []);
+    mezclada.forEach((nombre, i) => grupos[i % n].push(nombre));
+    setGruposResultado({ ciclo: cicloParaleloSel, paralelo: paraleloSel, materiaId: grupoMateriaId, grupos });
+  }
+
+  function generarPDFGrupos() {
+    if (!gruposResultado) return;
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    const materiaSel = getMateria(gruposResultado.materiaId);
+    doc.setFontSize(12);
+    doc.text("ECEME \"Mcal. Andrés de Santa Cruz\"", 14, 15);
+    doc.setFontSize(10);
+    doc.text("Grupos de trabajo — " + gruposResultado.ciclo + " · Paralelo " + gruposResultado.paralelo, 14, 22);
+    if (materiaSel) doc.text("Materia: " + materiaSel.materia, 14, 28);
+    let y = materiaSel ? 36 : 30;
+    gruposResultado.grupos.forEach((grupo, idx) => {
+      if (y > 270) {
+        doc.addPage();
+        y = 20;
+      }
+      doc.setFontSize(11);
+      doc.text("Grupo " + (idx + 1), 14, y);
+      y += 6;
+      doc.setFontSize(9);
+      grupo.forEach((nombre) => {
+        doc.text("• " + nombre, 18, y);
+        y += 5;
+      });
+      y += 4;
+    });
+    doc.save("grupos_trabajo.pdf");
+  }
+
+  function generarWordGrupos() {
+    if (!gruposResultado) return;
+    const materiaSel = getMateria(gruposResultado.materiaId);
+    let html =
+      '<div style="text-align:center;font-weight:bold;">FACULTAD DE CIENCIAS Y ARTES MILITARES TERRESTRES</div>' +
+      '<div style="text-align:center;font-weight:bold;">ESCUELA DE COMANDO Y ESTADO MAYOR DEL EJÉRCITO</div>' +
+      '<div style="text-align:center;font-weight:bold;">"MCAL. ANDRÉS DE SANTA CRUZ"</div>' +
+      '<div style="text-align:center;font-weight:bold;text-decoration:underline;">BOLIVIA</div><br/>' +
+      '<div style="text-align:center;font-weight:bold;">SORTEO DE GRUPOS DE TRABAJO — ' + gruposResultado.ciclo.toUpperCase() + " · PARALELO " + gruposResultado.paralelo + "</div>";
+    if (materiaSel) html += '<div style="text-align:center;">Materia: ' + materiaSel.materia + "</div>";
+    html += "<br/>";
+    gruposResultado.grupos.forEach((grupo, idx) => {
+      html += '<div style="font-weight:bold;margin-top:10px;">Grupo ' + (idx + 1) + "</div><ul>";
+      grupo.forEach((nombre) => {
+        html += "<li>" + nombre + "</li>";
+      });
+      html += "</ul>";
+    });
+    html +=
+      '<br/><br/><div style="text-align:center;">Tcnl. DEM. Bladimir Soto Farfán</div>' +
+      '<div style="text-align:center;font-weight:bold;">' + firmaPorCiclo(gruposResultado.ciclo) + "</div>";
+    descargarWord(html, "grupos_trabajo.doc");
+  }
+
+  // --- Distribución de asientos ---
+
+  function armarGrillaAsientos(lista, numCols) {
+    const n = lista.length;
+    if (n === 0) return [];
+    const base = Math.floor(n / numCols);
+    const colSizes = new Array(numCols).fill(base);
+    colSizes[numCols - 1] += n - base * numCols;
+    const columnas = [];
+    let idx = 0;
+    for (let c = 0; c < numCols; c++) {
+      columnas.push(lista.slice(idx, idx + colSizes[c]));
+      idx += colSizes[c];
+    }
+    const numRows = Math.max(...colSizes);
+    const filas = [];
+    for (let r = 0; r < numRows; r++) {
+      const fila = [];
+      for (let c = 0; c < numCols; c++) {
+        fila.push(columnas[c][r] || "");
+      }
+      filas.push(fila);
+    }
+    return filas;
+  }
+
+  function generarAsientos() {
+    setError("");
+    const numCols = Number(asientosNumCols) || 4;
+    const resultado = {};
+    let algunaLista = false;
+    ["A", "B", "C"].forEach((par) => {
+      const clave = claveParalelo(cicloParaleloSel, par);
+      const lista = cursantesParalelo[clave] || [];
+      if (lista.length > 0) algunaLista = true;
+      resultado[par] = armarGrillaAsientos(mezclar(lista), numCols);
+    });
+    if (!algunaLista) {
+      setError("No hay cursantes cargados para ningún paralelo de " + cicloParaleloSel + ".");
+      return;
+    }
+    setAsientosResultado({ ciclo: cicloParaleloSel, fecha: asientosFecha, numCols, porParalelo: resultado });
+  }
+
+  function generarPDFAsientos() {
+    if (!asientosResultado) return;
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    let primera = true;
+    ["A", "B", "C"].forEach((par) => {
+      const filas = asientosResultado.porParalelo[par];
+      if (!filas || filas.length === 0) return;
+      if (!primera) doc.addPage();
+      primera = false;
+      doc.setFontSize(11);
+      doc.text('ESCUELA DE COMANDO Y ESTADO MAYOR DEL EJÉRCITO "MCAL. ANDRÉS DE SANTA CRUZ"', 14, 15);
+      doc.setFontSize(10);
+      doc.text("DISTRIBUCIÓN DE ASIENTOS PARA EXAMEN — " + asientosResultado.ciclo.toUpperCase(), 14, 22);
+      if (asientosResultado.fecha) doc.text("Evaluación del " + asientosResultado.fecha, 14, 28);
+      doc.setFontSize(11);
+      doc.text('PARALELO "' + par + '"', 14, 36);
+      doc.setFontSize(8);
+      doc.text("↑ FRENTE DEL AULA / PIZARRA ↑", 14, 41);
+      doc.autoTable({
+        startY: 45,
+        head: [Array.from({ length: asientosResultado.numCols }, (_, i) => "COLUMNA " + (i + 1))],
+        body: filas,
+        styles: { fontSize: 8, cellPadding: 3, halign: "center" },
+        headStyles: { fillColor: [42, 53, 33] },
+      });
+      const finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY : 45;
+      doc.setFontSize(10);
+      doc.text("Tcnl. DEM. Bladimir Soto Farfán", 14, finalY + 14);
+      doc.text(firmaPorCiclo(asientosResultado.ciclo), 14, finalY + 20);
+    });
+    doc.save("distribucion_asientos.pdf");
+  }
+
+  function generarWordAsientos() {
+    if (!asientosResultado) return;
+    let html =
+      '<div style="text-align:center;font-weight:bold;">FACULTAD DE CIENCIAS Y ARTES MILITARES TERRESTRES</div>' +
+      '<div style="text-align:center;font-weight:bold;">ESCUELA DE COMANDO Y ESTADO MAYOR DEL EJÉRCITO</div>' +
+      '<div style="text-align:center;font-weight:bold;">"MCAL. ANDRÉS DE SANTA CRUZ"</div>' +
+      '<div style="text-align:center;font-weight:bold;text-decoration:underline;">BOLIVIA</div><br/>' +
+      '<div style="text-align:center;font-weight:bold;">DISTRIBUCIÓN DE ASIENTOS PARA EXAMEN — CURSANTES DEL ' + asientosResultado.ciclo.toUpperCase() + "</div>";
+    if (asientosResultado.fecha) {
+      html += '<div style="text-align:center;font-weight:bold;">EVALUACIÓN DEL ' + asientosResultado.fecha.toUpperCase() + "</div>";
+    }
+    ["A", "B", "C"].forEach((par) => {
+      const filas = asientosResultado.porParalelo[par];
+      if (!filas || filas.length === 0) return;
+      html += '<br/><div style="font-weight:bold;">PARALELO "' + par + '"</div>';
+      html += '<div style="text-align:center;">↑ FRENTE DEL AULA / PIZARRA ↑</div>';
+      html += '<table border="1" style="border-collapse:collapse;width:100%;margin-top:6px;" cellpadding="6">';
+      html += "<tr>";
+      for (let c = 0; c < asientosResultado.numCols; c++) {
+        html += '<td style="font-weight:bold;text-align:center;background:#eee;">COLUMNA ' + (c + 1) + "</td>";
+      }
+      html += "</tr>";
+      filas.forEach((fila) => {
+        html += "<tr>";
+        fila.forEach((nombre) => {
+          html += '<td style="text-align:center;">' + (nombre || "") + "</td>";
+        });
+        html += "</tr>";
+      });
+      html += "</table>";
+    });
+    html +=
+      '<br/><br/><div style="text-align:center;">Tcnl. DEM. Bladimir Soto Farfán</div>' +
+      '<div style="text-align:center;font-weight:bold;">' + firmaPorCiclo(asientosResultado.ciclo) + "</div>";
+    descargarWord(html, "distribucion_asientos.doc");
   }
 
   function toggleApoyo(id) {
@@ -432,7 +1103,7 @@ function ControlExamenes() {
       duracion: duracionPorTipo(form.tipo),
       mencionMateria: materiaSel.track + " — " + materiaSel.materia,
       profesoresMateria: (profesoresPorMateria[form.materiaId] || [])
-        .map((id) => (personal.find((p) => p.id === id) || {}).nombre)
+        .map((id) => (docentes.find((p) => p.id === id) || {}).nombre)
         .filter(Boolean),
       apoyos: form.apoyos,
     };
@@ -686,38 +1357,24 @@ function ControlExamenes() {
           </div>
         )}
 
-        <div className="grid-2-wide">
-          <section style={{ background: parchmentCard, border: "1px solid " + borderCol, borderRadius: 8, padding: "18px 20px" }}>
-            <h2 style={{ fontFamily: "Georgia, serif", fontSize: 16, margin: "0 0 12px", color: olive }}>Personal de apoyo</h2>
-            <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
-              <input
-                value={nuevoNombre}
-                onChange={(e) => setNuevoNombre(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && agregarPersona()}
-                placeholder="Nombre y grado"
-                style={{ flex: 1, padding: "8px 10px", border: "1px solid " + borderCol, borderRadius: 5, fontSize: 14, background: "#fff" }}
-              />
-              <button onClick={agregarPersona} style={{ background: olive, color: "#fff", border: "none", borderRadius: 5, padding: "8px 14px", fontSize: 14, cursor: "pointer" }}>
-                Añadir
-              </button>
-            </div>
-            {personal.length === 0 ? (
-              <div style={{ fontSize: 13, color: inkMuted }}>Todavía no hay personal registrado.</div>
-            ) : (
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                {personal.map((p) => (
-                  <span key={p.id} style={{ display: "inline-flex", alignItems: "center", gap: 6, background: brassLight, color: "#5a4321", borderRadius: 20, padding: "4px 6px 4px 12px", fontSize: 13 }}>
-                    {p.nombre}
-                    <button onClick={() => quitarPersona(p.id)} title="Quitar" style={{ border: "none", background: "transparent", color: "#7a5a2a", cursor: "pointer", fontSize: 14, lineHeight: 1, padding: "2px 4px" }}>
-                      ×
-                    </button>
-                  </span>
-                ))}
-              </div>
-            )}
-          </section>
+        <div style={{ display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap" }}>
+          <button onClick={() => setActiveTab("comite")}
+            style={{ background: activeTab === "comite" ? oliveDeep : "#fff", color: activeTab === "comite" ? "#fff" : inkDark, border: "1px solid " + oliveDeep, borderRadius: 20, padding: "8px 16px", fontSize: 13, cursor: "pointer", fontWeight: activeTab === "comite" ? "bold" : "normal" }}>
+            1. Comité de Evaluación
+          </button>
+          <button onClick={() => setActiveTab("control")}
+            style={{ background: activeTab === "control" ? oliveDeep : "#fff", color: activeTab === "control" ? "#fff" : inkDark, border: "1px solid " + oliveDeep, borderRadius: 20, padding: "8px 16px", fontSize: 13, cursor: "pointer", fontWeight: activeTab === "control" ? "bold" : "normal" }}>
+            2. Control de Evaluación
+          </button>
+          <button onClick={() => setActiveTab("ciclos")}
+            style={{ background: activeTab === "ciclos" ? oliveDeep : "#fff", color: activeTab === "ciclos" ? "#fff" : inkDark, border: "1px solid " + oliveDeep, borderRadius: 20, padding: "8px 16px", fontSize: 13, cursor: "pointer", fontWeight: activeTab === "ciclos" ? "bold" : "normal" }}>
+            3. Ciclos (Grupos y Asientos)
+          </button>
+        </div>
 
-          <section style={{ background: parchmentCard, border: "1px solid " + borderCol, borderRadius: 8, padding: "18px 20px" }}>
+        {activeTab === "comite" && (
+          <React.Fragment>
+          <section style={{ background: parchmentCard, border: "1px solid " + borderCol, borderRadius: 8, padding: "18px 20px", marginBottom: 20 }}>
             <h2 style={{ fontFamily: "Georgia, serif", fontSize: 16, margin: "0 0 12px", color: olive }}>Registrar examen</h2>
             <form onSubmit={registrarExamen} style={{ display: "grid", gap: 10 }}>
               <div className="grid-2">
@@ -747,7 +1404,7 @@ function ControlExamenes() {
                 <select value={form.materiaId} onChange={(e) => setForm((f) => ({ ...f, materiaId: e.target.value }))}
                   style={{ display: "block", width: "100%", marginTop: 4, padding: "7px 8px", border: "1px solid " + borderCol, borderRadius: 5, fontSize: 13 }}>
                   <option value="">Seleccione una materia…</option>
-                  {MATERIAS_ORDEN.filter((m) => m.ciclo === form.ciclo).map((m) => (
+                  {materias.filter((m) => m.ciclo === form.ciclo).map((m) => (
                     <option key={m.id} value={m.id}>
                       {m.n}. [{m.track}] {m.materia}
                     </option>
@@ -758,11 +1415,11 @@ function ControlExamenes() {
               {form.materiaId && (
                 <div>
                   <div style={{ fontSize: 12, color: inkMuted, marginBottom: 6 }}>Docentes que dictaron esta materia (para el mensaje de WhatsApp)</div>
-                  {personal.length === 0 ? (
-                    <div style={{ fontSize: 13, color: inkMuted }}>Añada personal en la sección de arriba primero.</div>
+                  {docentes.length === 0 ? (
+                    <div style={{ fontSize: 13, color: inkMuted }}>Añada docentes en la pestaña "Control de Evaluación" primero.</div>
                   ) : (
                     <div style={{ display: "flex", flexWrap: "wrap", gap: 8, maxHeight: 140, overflowY: "auto" }}>
-                      {personal.map((p) => {
+                      {docentes.map((p) => {
                         const activo = (profesoresPorMateria[form.materiaId] || []).includes(p.id);
                         return (
                           <button type="button" key={p.id} onClick={() => toggleProfesorMateria(form.materiaId, p.id)}
@@ -794,7 +1451,7 @@ function ControlExamenes() {
               <div>
                 <div style={{ fontSize: 12, color: inkMuted, marginBottom: 6 }}>Personas de apoyo y paralelo (A, B o C)</div>
                 {personal.length === 0 ? (
-                  <div style={{ fontSize: 13, color: inkMuted }}>Añada personal arriba primero.</div>
+                  <div style={{ fontSize: 13, color: inkMuted }}>Añada personal en la pestaña "Control de Evaluación" primero.</div>
                 ) : (
                   <React.Fragment>
                     {form.apoyos.length > 0 && (
@@ -837,142 +1494,498 @@ function ControlExamenes() {
               </button>
             </form>
           </section>
-        </div>
 
-        <section style={{ background: parchmentCard, border: "1px solid " + borderCol, borderRadius: 8, padding: "18px 20px", marginBottom: 20 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-            <h2 style={{ fontFamily: "Georgia, serif", fontSize: 16, margin: 0, color: olive }}>Balance de carga por persona</h2>
-            <select value={filtroCiclo} onChange={(e) => setFiltroCiclo(e.target.value)}
-              style={{ padding: "6px 8px", border: "1px solid " + borderCol, borderRadius: 5, fontSize: 13 }}>
-              <option>Todos</option>
-              <option>1er Ciclo</option>
-              <option>2do Ciclo</option>
-            </select>
-          </div>
-          {balance.length === 0 ? (
-            <div style={{ fontSize: 13, color: inkMuted }}>Aún no hay datos para mostrar el balance.</div>
-          ) : (
-            <div style={{ display: "grid", gap: 10 }}>
-              {balance.map((b) => (
-                <div key={b.nombre} className="balance-row">
-                  <div style={{ fontSize: 13 }}>{b.nombre}</div>
-                  <div style={{ background: "#ece6d4", borderRadius: 4, height: 14, position: "relative" }}>
-                    <div style={{ width: Math.round((b.minutos / maxMinutos) * 100) + "%", background: olive, height: "100%", borderRadius: 4 }} />
-                  </div>
-                  <div style={{ fontSize: 12, color: inkMuted, textAlign: "right" }}>
-                    {b.minutos} min · {b.formativos}F / {b.sumativos}S
-                  </div>
-                </div>
-              ))}
+          <section style={{ background: parchmentCard, border: "1px solid " + borderCol, borderRadius: 8, padding: "18px 20px", marginBottom: 20 }}>
+            <h2 style={{ fontFamily: "Georgia, serif", fontSize: 16, margin: "0 0 12px", color: olive }}>Materias</h2>
+
+            <div className="grid-2" style={{ marginBottom: 10 }}>
+              <label style={{ fontSize: 12, color: inkMuted }}>
+                Curso / mención
+                <select value={nuevaMateriaTrack} onChange={(e) => {
+                  const track = e.target.value;
+                  setNuevaMateriaTrack(track);
+                  setNuevaMateriaCiclo(track === "1ER. CICLO" ? "1er Ciclo" : "2do Ciclo");
+                }}
+                  style={{ display: "block", width: "100%", marginTop: 4, padding: "7px 8px", border: "1px solid " + borderCol, borderRadius: 5, fontSize: 13 }}>
+                  <option value="1ER. CICLO">1ER. CICLO</option>
+                  <option value="2DO. CICLO">2DO. CICLO</option>
+                  <option value="ESTRATEGIA">ESTRATEGIA</option>
+                  <option value="INTELIGENCIA">INTELIGENCIA</option>
+                  <option value="LOGÍSTICA">LOGÍSTICA</option>
+                  <option value="RECURSOS HUMANOS">RECURSOS HUMANOS</option>
+                </select>
+              </label>
+              <label style={{ fontSize: 12, color: inkMuted }}>
+                Nombre de la materia
+                <input value={nuevaMateriaNombre} onChange={(e) => setNuevaMateriaNombre(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && agregarMateria()}
+                  placeholder="Ej. NOMBRE DE LA MATERIA (CÓDIGO)"
+                  style={{ display: "block", width: "100%", marginTop: 4, padding: "7px 8px", border: "1px solid " + borderCol, borderRadius: 5, fontSize: 13 }} />
+              </label>
             </div>
-          )}
-        </section>
-
-        <section style={{ background: parchmentCard, border: "1px solid " + borderCol, borderRadius: 8, padding: "18px 20px", marginBottom: 20 }}>
-          <h2 style={{ fontFamily: "Georgia, serif", fontSize: 16, margin: "0 0 12px", color: olive }}>Mensaje para WhatsApp</h2>
-
-          <div className="grid-2" style={{ marginBottom: 12 }}>
-            <label style={{ fontSize: 12, color: inkMuted }}>
-              Roles para 1er Ciclo (entre paréntesis)
-              <input value={rolesConfig["1er Ciclo"]} onChange={(e) => guardarRolesConfig({ ...rolesConfig, "1er Ciclo": e.target.value })}
-                style={{ display: "block", width: "100%", marginTop: 4, padding: "7px 8px", border: "1px solid " + borderCol, borderRadius: 5, fontSize: 12 }} />
-            </label>
-            <label style={{ fontSize: 12, color: inkMuted }}>
-              Roles para 2do Ciclo (entre paréntesis)
-              <input value={rolesConfig["2do Ciclo"]} onChange={(e) => guardarRolesConfig({ ...rolesConfig, "2do Ciclo": e.target.value })}
-                style={{ display: "block", width: "100%", marginTop: 4, padding: "7px 8px", border: "1px solid " + borderCol, borderRadius: 5, fontSize: 12 }} />
-            </label>
-          </div>
-
-          <div style={{ display: "flex", gap: 8, alignItems: "flex-end", marginBottom: 12, flexWrap: "wrap" }}>
-            <label style={{ fontSize: 12, color: inkMuted }}>
-              Fecha del examen
-              <select value={fechaMensaje} onChange={(e) => setFechaMensaje(e.target.value)}
-                style={{ display: "block", marginTop: 4, padding: "7px 8px", border: "1px solid " + borderCol, borderRadius: 5, fontSize: 13, minWidth: 160 }}>
-                <option value="">Seleccione…</option>
-                {Array.from(new Set(registros.map((r) => r.fecha))).sort().map((f) => (
-                  <option key={f} value={f}>{f}</option>
-                ))}
-              </select>
-            </label>
-            <button onClick={generarMensaje} disabled={registros.length === 0}
-              style={{ background: registros.length === 0 ? "#c9c2ac" : brass, color: "#fff", border: "none", borderRadius: 5, padding: "9px 14px", fontSize: 13, cursor: registros.length === 0 ? "default" : "pointer" }}>
-              Generar mensaje
+            <button onClick={agregarMateria} style={{ background: olive, color: "#fff", border: "none", borderRadius: 5, padding: "8px 14px", fontSize: 13, cursor: "pointer", marginBottom: 14 }}>
+              Añadir materia
             </button>
-          </div>
 
-          {mensaje && (
-            <div>
-              <textarea value={mensaje} onChange={(e) => setMensaje(e.target.value)} rows={14}
-                style={{ width: "100%", boxSizing: "border-box", padding: 10, border: "1px solid " + borderCol, borderRadius: 6, fontSize: 13, fontFamily: "inherit", marginBottom: 10 }} />
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                <button onClick={copiarMensaje} style={{ background: olive, color: "#fff", border: "none", borderRadius: 5, padding: "8px 14px", fontSize: 13, cursor: "pointer" }}>
-                  Copiar mensaje
-                </button>
-                <button onClick={enviarPorWhatsApp} style={{ background: "#3fa15e", color: "#fff", border: "none", borderRadius: 5, padding: "8px 14px", fontSize: 13, cursor: "pointer" }}>
-                  Enviar por WhatsApp
+            <div style={{ maxHeight: 320, overflowY: "auto", border: "1px solid " + borderCol, borderRadius: 6 }}>
+              {materias.length === 0 ? (
+                <div style={{ padding: 12, fontSize: 13, color: inkMuted }}>No hay materias cargadas.</div>
+              ) : (
+                materias.map((m, idx) => (
+                  <div key={m.id} style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 10px", borderBottom: "1px solid " + borderCol, background: idx % 2 === 0 ? "#fff" : "transparent" }}>
+                    <span style={{ fontSize: 11, color: inkMuted, minWidth: 22 }}>{m.n}.</span>
+                    <span style={{ fontSize: 11, background: brassLight, color: "#6b4b1c", borderRadius: 4, padding: "2px 6px", whiteSpace: "nowrap" }}>{m.track}</span>
+                    {materiaEditId === m.id ? (
+                      <input value={materiaEditTexto} onChange={(e) => setMateriaEditTexto(e.target.value)}
+                        onKeyDown={(e) => e.key === "Enter" && guardarEdicionMateria(m.id)}
+                        style={{ flex: 1, padding: "5px 8px", border: "1px solid " + borderCol, borderRadius: 5, fontSize: 12 }} />
+                    ) : (
+                      <span style={{ flex: 1, fontSize: 12 }}>{m.materia}</span>
+                    )}
+                    <div style={{ display: "flex", gap: 4 }}>
+                      <button onClick={() => moverMateria(m.id, -1)} disabled={idx === 0} title="Subir"
+                        style={{ border: "none", background: "transparent", color: idx === 0 ? "#c9c2ac" : inkMuted, cursor: idx === 0 ? "default" : "pointer", fontSize: 13 }}>↑</button>
+                      <button onClick={() => moverMateria(m.id, 1)} disabled={idx === materias.length - 1} title="Bajar"
+                        style={{ border: "none", background: "transparent", color: idx === materias.length - 1 ? "#c9c2ac" : inkMuted, cursor: idx === materias.length - 1 ? "default" : "pointer", fontSize: 13 }}>↓</button>
+                      {materiaEditId === m.id ? (
+                        <button onClick={() => guardarEdicionMateria(m.id)} title="Guardar" style={{ border: "none", background: "transparent", color: "#3b5a25", cursor: "pointer", fontSize: 12 }}>Guardar</button>
+                      ) : (
+                        <button onClick={() => iniciarEdicionMateria(m)} title="Editar" style={{ border: "none", background: "transparent", color: brass, cursor: "pointer", fontSize: 12 }}>Editar</button>
+                      )}
+                      <button onClick={() => quitarMateria(m.id)} title="Eliminar" style={{ border: "none", background: "transparent", color: danger, cursor: "pointer", fontSize: 12 }}>Eliminar</button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </section>
+
+          <section style={{ background: parchmentCard, border: "1px solid " + borderCol, borderRadius: 8, padding: "18px 20px" }}>
+            <h2 style={{ fontFamily: "Georgia, serif", fontSize: 16, margin: "0 0 12px", color: olive }}>Mensaje para WhatsApp</h2>
+
+            <div className="grid-2" style={{ marginBottom: 12 }}>
+              <label style={{ fontSize: 12, color: inkMuted }}>
+                Roles para 1er Ciclo (entre paréntesis)
+                <input value={rolesConfig["1er Ciclo"]} onChange={(e) => guardarRolesConfig({ ...rolesConfig, "1er Ciclo": e.target.value })}
+                  style={{ display: "block", width: "100%", marginTop: 4, padding: "7px 8px", border: "1px solid " + borderCol, borderRadius: 5, fontSize: 12 }} />
+              </label>
+              <label style={{ fontSize: 12, color: inkMuted }}>
+                Roles para 2do Ciclo (entre paréntesis)
+                <input value={rolesConfig["2do Ciclo"]} onChange={(e) => guardarRolesConfig({ ...rolesConfig, "2do Ciclo": e.target.value })}
+                  style={{ display: "block", width: "100%", marginTop: 4, padding: "7px 8px", border: "1px solid " + borderCol, borderRadius: 5, fontSize: 12 }} />
+              </label>
+            </div>
+
+            <div style={{ display: "flex", gap: 8, alignItems: "flex-end", marginBottom: 12, flexWrap: "wrap" }}>
+              <label style={{ fontSize: 12, color: inkMuted }}>
+                Fecha del examen
+                <select value={fechaMensaje} onChange={(e) => setFechaMensaje(e.target.value)}
+                  style={{ display: "block", marginTop: 4, padding: "7px 8px", border: "1px solid " + borderCol, borderRadius: 5, fontSize: 13, minWidth: 160 }}>
+                  <option value="">Seleccione…</option>
+                  {Array.from(new Set(registros.map((r) => r.fecha))).sort().map((f) => (
+                    <option key={f} value={f}>{f}</option>
+                  ))}
+                </select>
+              </label>
+              <button onClick={generarMensaje} disabled={registros.length === 0}
+                style={{ background: registros.length === 0 ? "#c9c2ac" : brass, color: "#fff", border: "none", borderRadius: 5, padding: "9px 14px", fontSize: 13, cursor: registros.length === 0 ? "default" : "pointer" }}>
+                Generar mensaje
+              </button>
+            </div>
+
+            {mensaje && (
+              <div>
+                <textarea value={mensaje} onChange={(e) => setMensaje(e.target.value)} rows={14}
+                  style={{ width: "100%", boxSizing: "border-box", padding: 10, border: "1px solid " + borderCol, borderRadius: 6, fontSize: 13, fontFamily: "inherit", marginBottom: 10 }} />
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                  <button onClick={copiarMensaje} style={{ background: olive, color: "#fff", border: "none", borderRadius: 5, padding: "8px 14px", fontSize: 13, cursor: "pointer" }}>
+                    Copiar mensaje
+                  </button>
+                  <button onClick={enviarPorWhatsApp} style={{ background: "#3fa15e", color: "#fff", border: "none", borderRadius: 5, padding: "8px 14px", fontSize: 13, cursor: "pointer" }}>
+                    Enviar por WhatsApp
+                  </button>
+                </div>
+              </div>
+            )}
+          </section>
+          </React.Fragment>
+        )}
+
+        {activeTab === "control" && (
+          <React.Fragment>
+          <div className="grid-2-wide">
+            <section style={{ background: parchmentCard, border: "1px solid " + borderCol, borderRadius: 8, padding: "18px 20px" }}>
+              <h2 style={{ fontFamily: "Georgia, serif", fontSize: 16, margin: "0 0 12px", color: olive }}>Personal de apoyo</h2>
+              <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+                <input
+                  value={nuevoNombre}
+                  onChange={(e) => setNuevoNombre(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && agregarPersona()}
+                  placeholder="Nombre y grado"
+                  style={{ flex: 1, padding: "8px 10px", border: "1px solid " + borderCol, borderRadius: 5, fontSize: 14, background: "#fff" }}
+                />
+                <button onClick={agregarPersona} style={{ background: olive, color: "#fff", border: "none", borderRadius: 5, padding: "8px 14px", fontSize: 14, cursor: "pointer" }}>
+                  Añadir
                 </button>
               </div>
-            </div>
-          )}
-        </section>
-
-        <section style={{ background: parchmentCard, border: "1px solid " + borderCol, borderRadius: 8, padding: "18px 20px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-            <h2 style={{ fontFamily: "Georgia, serif", fontSize: 16, margin: 0, color: olive }}>Registros de exámenes</h2>
-            <button onClick={generarPDF} disabled={registros.length === 0}
-              style={{ background: registros.length === 0 ? "#c9c2ac" : olive, color: "#fff", border: "none", borderRadius: 5, padding: "8px 14px", fontSize: 13, cursor: registros.length === 0 ? "default" : "pointer" }}>
-              Generar reporte PDF
-            </button>
-          </div>
-          {registrosFiltrados.length === 0 ? (
-            <div style={{ fontSize: 13, color: inkMuted }}>No hay registros para el ciclo seleccionado.</div>
-          ) : (
-            <div style={{ overflowX: "auto" }}>
-              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
-                <thead>
-                  <tr style={{ textAlign: "left", borderBottom: "2px solid " + borderCol, color: inkMuted }}>
-                    <th style={{ padding: "6px 8px" }}>Fecha</th>
-                    <th style={{ padding: "6px 8px" }}>Hora</th>
-                    <th style={{ padding: "6px 8px" }}>Ciclo</th>
-                    <th style={{ padding: "6px 8px" }}>Tipo</th>
-                    <th style={{ padding: "6px 8px" }}>Mención / materia</th>
-                    <th style={{ padding: "6px 8px" }}>Docentes (materia)</th>
-                    <th style={{ padding: "6px 8px" }}>Apoyo</th>
-                    <th style={{ padding: "6px 8px" }}></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {registrosFiltrados.map((r) => (
-                    <tr key={r.id} style={{ borderBottom: "1px solid " + borderCol }}>
-                      <td style={{ padding: "6px 8px" }}>{r.fecha}</td>
-                      <td style={{ padding: "6px 8px" }}>{r.hora || "—"}</td>
-                      <td style={{ padding: "6px 8px" }}>{r.ciclo}</td>
-                      <td style={{ padding: "6px 8px" }}>
-                        <span style={{ background: r.tipo.toLowerCase().indexOf("sumativ") !== -1 ? brassLight : "#e2ead6", color: r.tipo.toLowerCase().indexOf("sumativ") !== -1 ? "#6b4b1c" : "#3b5a25", borderRadius: 4, padding: "2px 8px", fontSize: 12 }}>
-                          {r.tipo}
-                        </span>
-                      </td>
-                      <td style={{ padding: "6px 8px" }}>{r.mencionMateria}</td>
-                      <td style={{ padding: "6px 8px" }}>{(r.profesoresMateria || []).join(", ") || "—"}</td>
-                      <td style={{ padding: "6px 8px" }}>
-                        {r.apoyos.map((a) => {
-                          const persona = personal.find((p) => p.id === a.personaId);
-                          return (persona ? persona.nombre : "—") + " (Par. " + a.paralelo + ")";
-                        }).join(", ")}
-                      </td>
-                      <td style={{ padding: "6px 8px", textAlign: "right" }}>
-                        <button onClick={() => eliminarRegistro(r.id)} style={{ border: "none", background: "transparent", color: danger, cursor: "pointer", fontSize: 12 }}>
-                          Eliminar
-                        </button>
-                      </td>
-                    </tr>
+              <details style={{ marginBottom: 12 }}>
+                <summary style={{ fontSize: 12, color: inkMuted, cursor: "pointer" }}>Pegar lista completa (un nombre por línea)</summary>
+                <div style={{ marginTop: 8 }}>
+                  <textarea value={textoLotePersonal} onChange={(e) => setTextoLotePersonal(e.target.value)} rows={5}
+                    style={{ width: "100%", boxSizing: "border-box", padding: 8, border: "1px solid " + borderCol, borderRadius: 5, fontSize: 13, fontFamily: "inherit", marginBottom: 8 }} />
+                  <button onClick={() => agregarPersonalEnLote(textoLotePersonal)} style={{ background: brass, color: "#fff", border: "none", borderRadius: 5, padding: "7px 12px", fontSize: 13, cursor: "pointer" }}>
+                    Cargar toda la lista
+                  </button>
+                </div>
+              </details>
+              {personal.length === 0 ? (
+                <div style={{ fontSize: 13, color: inkMuted }}>Todavía no hay personal registrado.</div>
+              ) : (
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                  {personal.map((p) => (
+                    <span key={p.id} style={{ display: "inline-flex", alignItems: "center", gap: 6, background: brassLight, color: "#5a4321", borderRadius: 20, padding: "4px 6px 4px 12px", fontSize: 13 }}>
+                      {p.nombre}
+                      <button onClick={() => quitarPersona(p.id)} title="Quitar" style={{ border: "none", background: "transparent", color: "#7a5a2a", cursor: "pointer", fontSize: 14, lineHeight: 1, padding: "2px 4px" }}>
+                        ×
+                      </button>
+                    </span>
                   ))}
-                </tbody>
-              </table>
+                </div>
+              )}
+            </section>
+
+            <section style={{ background: parchmentCard, border: "1px solid " + borderCol, borderRadius: 8, padding: "18px 20px" }}>
+              <h2 style={{ fontFamily: "Georgia, serif", fontSize: 16, margin: "0 0 12px", color: olive }}>Docentes (dictan materias)</h2>
+              <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+                <input
+                  value={nuevoDocente}
+                  onChange={(e) => setNuevoDocente(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && agregarDocente()}
+                  placeholder="Nombre y grado"
+                  style={{ flex: 1, padding: "8px 10px", border: "1px solid " + borderCol, borderRadius: 5, fontSize: 14, background: "#fff" }}
+                />
+                <button onClick={agregarDocente} style={{ background: "#3b5a25", color: "#fff", border: "none", borderRadius: 5, padding: "8px 14px", fontSize: 14, cursor: "pointer" }}>
+                  Añadir
+                </button>
+              </div>
+              <details style={{ marginBottom: 12 }}>
+                <summary style={{ fontSize: 12, color: inkMuted, cursor: "pointer" }}>Pegar lista completa (un nombre por línea)</summary>
+                <div style={{ marginTop: 8 }}>
+                  <textarea value={textoLoteDocentes} onChange={(e) => setTextoLoteDocentes(e.target.value)} rows={5}
+                    style={{ width: "100%", boxSizing: "border-box", padding: 8, border: "1px solid " + borderCol, borderRadius: 5, fontSize: 13, fontFamily: "inherit", marginBottom: 8 }} />
+                  <button onClick={() => agregarDocentesEnLote(textoLoteDocentes)} style={{ background: brass, color: "#fff", border: "none", borderRadius: 5, padding: "7px 12px", fontSize: 13, cursor: "pointer" }}>
+                    Cargar toda la lista
+                  </button>
+                </div>
+              </details>
+              {docentes.length === 0 ? (
+                <div style={{ fontSize: 13, color: inkMuted }}>Todavía no hay docentes registrados.</div>
+              ) : (
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                  {docentes.map((d) => (
+                    <span key={d.id} style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#e2ead6", color: "#2f4a1e", borderRadius: 20, padding: "4px 6px 4px 12px", fontSize: 13 }}>
+                      {d.nombre}
+                      <button onClick={() => quitarDocente(d.id)} title="Quitar" style={{ border: "none", background: "transparent", color: "#3b5a25", cursor: "pointer", fontSize: 14, lineHeight: 1, padding: "2px 4px" }}>
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </section>
+          </div>
+
+          <section style={{ background: parchmentCard, border: "1px solid " + borderCol, borderRadius: 8, padding: "18px 20px", marginBottom: 20 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+              <h2 style={{ fontFamily: "Georgia, serif", fontSize: 16, margin: 0, color: olive }}>Balance de carga por persona</h2>
+              <select value={filtroCiclo} onChange={(e) => setFiltroCiclo(e.target.value)}
+                style={{ padding: "6px 8px", border: "1px solid " + borderCol, borderRadius: 5, fontSize: 13 }}>
+                <option>Todos</option>
+                <option>1er Ciclo</option>
+                <option>2do Ciclo</option>
+              </select>
             </div>
-          )}
-        </section>
+            {balance.length === 0 ? (
+              <div style={{ fontSize: 13, color: inkMuted }}>Aún no hay datos para mostrar el balance.</div>
+            ) : (
+              <div style={{ display: "grid", gap: 10 }}>
+                {balance.map((b) => (
+                  <div key={b.nombre} className="balance-row">
+                    <div style={{ fontSize: 13 }}>{b.nombre}</div>
+                    <div style={{ background: "#ece6d4", borderRadius: 4, height: 14, position: "relative" }}>
+                      <div style={{ width: Math.round((b.minutos / maxMinutos) * 100) + "%", background: olive, height: "100%", borderRadius: 4 }} />
+                    </div>
+                    <div style={{ fontSize: 12, color: inkMuted, textAlign: "right" }}>
+                      {b.minutos} min · {b.formativos}F / {b.sumativos}S
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+
+          <section style={{ background: parchmentCard, border: "1px solid " + borderCol, borderRadius: 8, padding: "18px 20px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+              <h2 style={{ fontFamily: "Georgia, serif", fontSize: 16, margin: 0, color: olive }}>Registros de exámenes</h2>
+              <button onClick={generarPDF} disabled={registros.length === 0}
+                style={{ background: registros.length === 0 ? "#c9c2ac" : olive, color: "#fff", border: "none", borderRadius: 5, padding: "8px 14px", fontSize: 13, cursor: registros.length === 0 ? "default" : "pointer" }}>
+                Generar reporte PDF
+              </button>
+            </div>
+            {registrosFiltrados.length === 0 ? (
+              <div style={{ fontSize: 13, color: inkMuted }}>No hay registros para el ciclo seleccionado.</div>
+            ) : (
+              <div style={{ overflowX: "auto" }}>
+                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+                  <thead>
+                    <tr style={{ textAlign: "left", borderBottom: "2px solid " + borderCol, color: inkMuted }}>
+                      <th style={{ padding: "6px 8px" }}>Fecha</th>
+                      <th style={{ padding: "6px 8px" }}>Hora</th>
+                      <th style={{ padding: "6px 8px" }}>Ciclo</th>
+                      <th style={{ padding: "6px 8px" }}>Tipo</th>
+                      <th style={{ padding: "6px 8px" }}>Mención / materia</th>
+                      <th style={{ padding: "6px 8px" }}>Docentes (materia)</th>
+                      <th style={{ padding: "6px 8px" }}>Apoyo</th>
+                      <th style={{ padding: "6px 8px" }}></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {registrosFiltrados.map((r) => (
+                      <tr key={r.id} style={{ borderBottom: "1px solid " + borderCol }}>
+                        <td style={{ padding: "6px 8px" }}>{r.fecha}</td>
+                        <td style={{ padding: "6px 8px" }}>{r.hora || "—"}</td>
+                        <td style={{ padding: "6px 8px" }}>{r.ciclo}</td>
+                        <td style={{ padding: "6px 8px" }}>
+                          <span style={{ background: r.tipo.toLowerCase().indexOf("sumativ") !== -1 ? brassLight : "#e2ead6", color: r.tipo.toLowerCase().indexOf("sumativ") !== -1 ? "#6b4b1c" : "#3b5a25", borderRadius: 4, padding: "2px 8px", fontSize: 12 }}>
+                            {r.tipo}
+                          </span>
+                        </td>
+                        <td style={{ padding: "6px 8px" }}>{r.mencionMateria}</td>
+                        <td style={{ padding: "6px 8px" }}>{(r.profesoresMateria || []).join(", ") || "—"}</td>
+                        <td style={{ padding: "6px 8px" }}>
+                          {r.apoyos.map((a) => {
+                            const persona = personal.find((p) => p.id === a.personaId);
+                            return (persona ? persona.nombre : "—") + " (Par. " + a.paralelo + ")";
+                          }).join(", ")}
+                        </td>
+                        <td style={{ padding: "6px 8px", textAlign: "right" }}>
+                          <button onClick={() => eliminarRegistro(r.id)} style={{ border: "none", background: "transparent", color: danger, cursor: "pointer", fontSize: 12 }}>
+                            Eliminar
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </section>
+          </React.Fragment>
+        )}
+
+        {activeTab === "ciclos" && (
+          <React.Fragment>
+          <section style={{ background: parchmentCard, border: "1px solid " + borderCol, borderRadius: 8, padding: "18px 20px", marginBottom: 20 }}>
+            <h2 style={{ fontFamily: "Georgia, serif", fontSize: 16, margin: "0 0 12px", color: olive }}>Cursantes por paralelo</h2>
+            <div style={{ fontSize: 12, color: inkMuted, marginBottom: 10 }}>
+              Para organizar asientos y grupos por paralelo (A, B o C) en cada ciclo.
+            </div>
+
+            <div className="grid-2" style={{ marginBottom: 10 }}>
+              <label style={{ fontSize: 12, color: inkMuted }}>
+                Ciclo
+                <select value={cicloParaleloSel} onChange={(e) => setCicloParaleloSel(e.target.value)}
+                  style={{ display: "block", width: "100%", marginTop: 4, padding: "7px 8px", border: "1px solid " + borderCol, borderRadius: 5, fontSize: 13 }}>
+                  <option>1er Ciclo</option>
+                  <option>2do Ciclo</option>
+                </select>
+              </label>
+              <label style={{ fontSize: 12, color: inkMuted }}>
+                Paralelo
+                <select value={paraleloSel} onChange={(e) => setParaleloSel(e.target.value)}
+                  style={{ display: "block", width: "100%", marginTop: 4, padding: "7px 8px", border: "1px solid " + borderCol, borderRadius: 5, fontSize: 13 }}>
+                  <option value="A">Paralelo A</option>
+                  <option value="B">Paralelo B</option>
+                  <option value="C">Paralelo C</option>
+                </select>
+              </label>
+            </div>
+
+            <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+              <input
+                value={nuevoCursante}
+                onChange={(e) => setNuevoCursante(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && agregarCursante()}
+                placeholder="Nombre del cursante"
+                style={{ flex: 1, padding: "8px 10px", border: "1px solid " + borderCol, borderRadius: 5, fontSize: 14, background: "#fff" }}
+              />
+              <button onClick={agregarCursante} style={{ background: olive, color: "#fff", border: "none", borderRadius: 5, padding: "8px 14px", fontSize: 14, cursor: "pointer" }}>
+                Añadir
+              </button>
+            </div>
+
+            <details style={{ marginBottom: 12 }}>
+              <summary style={{ fontSize: 12, color: inkMuted, cursor: "pointer" }}>Pegar lista completa (un nombre por línea)</summary>
+              <div style={{ marginTop: 8 }}>
+                <textarea value={textoLoteCursantes} onChange={(e) => setTextoLoteCursantes(e.target.value)} rows={6}
+                  placeholder={"My. Inf. Pérez Gómez Juan\nMy. Cab. López Torrez Ana\n..."}
+                  style={{ width: "100%", boxSizing: "border-box", padding: 8, border: "1px solid " + borderCol, borderRadius: 5, fontSize: 13, fontFamily: "inherit", marginBottom: 8 }} />
+                <button onClick={() => agregarCursantesEnLote(textoLoteCursantes)} style={{ background: brass, color: "#fff", border: "none", borderRadius: 5, padding: "7px 12px", fontSize: 13, cursor: "pointer" }}>
+                  Cargar toda la lista
+                </button>
+              </div>
+            </details>
+
+            {(() => {
+              const clave = claveParalelo(cicloParaleloSel, paraleloSel);
+              const lista = cursantesParalelo[clave] || [];
+              return lista.length === 0 ? (
+                <div style={{ fontSize: 13, color: inkMuted }}>
+                  No hay cursantes cargados en {cicloParaleloSel} · Paralelo {paraleloSel}.
+                </div>
+              ) : (
+                <div>
+                  <div style={{ fontSize: 12, color: inkMuted, marginBottom: 8 }}>
+                    {cicloParaleloSel} · Paralelo {paraleloSel} — {lista.length} cursante{lista.length === 1 ? "" : "s"}
+                  </div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                    {lista.map((nombre) => (
+                      <span key={nombre} style={{ display: "inline-flex", alignItems: "center", gap: 6, background: brassLight, color: "#5a4321", borderRadius: 20, padding: "4px 6px 4px 12px", fontSize: 13 }}>
+                        {nombre}
+                        <button onClick={() => quitarCursante(nombre)} title="Quitar" style={{ border: "none", background: "transparent", color: "#7a5a2a", cursor: "pointer", fontSize: 14, lineHeight: 1, padding: "2px 4px" }}>
+                          ×
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
+          </section>
+
+          <section style={{ background: parchmentCard, border: "1px solid " + borderCol, borderRadius: 8, padding: "18px 20px", marginBottom: 20 }}>
+            <h2 style={{ fontFamily: "Georgia, serif", fontSize: 16, margin: "0 0 12px", color: olive }}>Grupos de trabajo aleatorios</h2>
+            <div style={{ fontSize: 12, color: inkMuted, marginBottom: 10 }}>
+              Sorteo independiente por paralelo (usa el Ciclo y Paralelo elegidos arriba: {cicloParaleloSel} · Paralelo {paraleloSel}).
+            </div>
+
+            <div className="grid-2" style={{ marginBottom: 10 }}>
+              <label style={{ fontSize: 12, color: inkMuted }}>
+                Materia (opcional, para el documento)
+                <select value={grupoMateriaId} onChange={(e) => setGrupoMateriaId(e.target.value)}
+                  style={{ display: "block", width: "100%", marginTop: 4, padding: "7px 8px", border: "1px solid " + borderCol, borderRadius: 5, fontSize: 13 }}>
+                  <option value="">Sin materia específica</option>
+                  {materias.filter((m) => m.ciclo === cicloParaleloSel).map((m) => (
+                    <option key={m.id} value={m.id}>{m.n}. {m.materia}</option>
+                  ))}
+                </select>
+              </label>
+              <label style={{ fontSize: 12, color: inkMuted }}>
+                Número de grupos
+                <input type="number" min={2} value={grupoNumGrupos} onChange={(e) => setGrupoNumGrupos(e.target.value)}
+                  style={{ display: "block", width: "100%", marginTop: 4, padding: "7px 8px", border: "1px solid " + borderCol, borderRadius: 5, fontSize: 13 }} />
+              </label>
+            </div>
+
+            <button onClick={generarGrupos} style={{ background: brass, color: "#fff", border: "none", borderRadius: 5, padding: "8px 14px", fontSize: 13, cursor: "pointer" }}>
+              Sortear grupos
+            </button>
+
+            {gruposResultado && (
+              <div style={{ marginTop: 16 }}>
+                <div style={{ fontSize: 12, color: inkMuted, marginBottom: 8 }}>
+                  {gruposResultado.ciclo} · Paralelo {gruposResultado.paralelo}
+                  {getMateria(gruposResultado.materiaId) ? " · " + getMateria(gruposResultado.materiaId).materia : ""}
+                </div>
+                <div style={{ display: "grid", gap: 10 }}>
+                  {gruposResultado.grupos.map((grupo, idx) => (
+                    <div key={idx} style={{ border: "1px solid " + borderCol, borderRadius: 6, padding: 10, background: "#fff" }}>
+                      <div style={{ fontWeight: "bold", fontSize: 13, marginBottom: 6, color: olive }}>Grupo {idx + 1}</div>
+                      <div style={{ fontSize: 13 }}>{grupo.join(", ")}</div>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap" }}>
+                  <button onClick={generarPDFGrupos} style={{ background: olive, color: "#fff", border: "none", borderRadius: 5, padding: "8px 14px", fontSize: 13, cursor: "pointer" }}>
+                    Descargar PDF
+                  </button>
+                  <button onClick={generarWordGrupos} style={{ background: "#2b579a", color: "#fff", border: "none", borderRadius: 5, padding: "8px 14px", fontSize: 13, cursor: "pointer" }}>
+                    Descargar Word
+                  </button>
+                </div>
+              </div>
+            )}
+          </section>
+
+          <section style={{ background: parchmentCard, border: "1px solid " + borderCol, borderRadius: 8, padding: "18px 20px" }}>
+            <h2 style={{ fontFamily: "Georgia, serif", fontSize: 16, margin: "0 0 12px", color: olive }}>Distribución de asientos</h2>
+            <div style={{ fontSize: 12, color: inkMuted, marginBottom: 10 }}>
+              Sortea los tres paralelos (A, B y C) del ciclo elegido arriba ({cicloParaleloSel}) en una sola operación.
+            </div>
+
+            <div className="grid-2" style={{ marginBottom: 10 }}>
+              <label style={{ fontSize: 12, color: inkMuted }}>
+                Fecha de la evaluación
+                <input value={asientosFecha} onChange={(e) => setAsientosFecha(e.target.value)}
+                  placeholder="Ej. 02 de septiembre de 2026"
+                  style={{ display: "block", width: "100%", marginTop: 4, padding: "7px 8px", border: "1px solid " + borderCol, borderRadius: 5, fontSize: 13 }} />
+              </label>
+              <label style={{ fontSize: 12, color: inkMuted }}>
+                Columnas por aula
+                <input type="number" min={2} max={6} value={asientosNumCols} onChange={(e) => setAsientosNumCols(e.target.value)}
+                  style={{ display: "block", width: "100%", marginTop: 4, padding: "7px 8px", border: "1px solid " + borderCol, borderRadius: 5, fontSize: 13 }} />
+              </label>
+            </div>
+
+            <button onClick={generarAsientos} style={{ background: brass, color: "#fff", border: "none", borderRadius: 5, padding: "8px 14px", fontSize: 13, cursor: "pointer" }}>
+              Sortear asientos (Paralelos A, B y C)
+            </button>
+
+            {asientosResultado && (
+              <div style={{ marginTop: 16 }}>
+                {["A", "B", "C"].map((par) => {
+                  const filas = asientosResultado.porParalelo[par];
+                  if (!filas || filas.length === 0) return null;
+                  return (
+                    <div key={par} style={{ marginBottom: 20 }}>
+                      <div style={{ fontWeight: "bold", color: olive, marginBottom: 4 }}>PARALELO "{par}"</div>
+                      <div style={{ fontSize: 11, color: inkMuted, textAlign: "center", marginBottom: 6 }}>↑ FRENTE DEL AULA / PIZARRA ↑</div>
+                      <div style={{ overflowX: "auto" }}>
+                        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
+                          <thead>
+                            <tr>
+                              {Array.from({ length: asientosResultado.numCols }).map((_, i) => (
+                                <th key={i} style={{ border: "1px solid " + borderCol, padding: 6, background: brassLight }}>Columna {i + 1}</th>
+                              ))}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {filas.map((fila, ri) => (
+                              <tr key={ri}>
+                                {fila.map((nombre, ci) => (
+                                  <td key={ci} style={{ border: "1px solid " + borderCol, padding: 6, textAlign: "center" }}>{nombre}</td>
+                                ))}
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  );
+                })}
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                  <button onClick={generarPDFAsientos} style={{ background: olive, color: "#fff", border: "none", borderRadius: 5, padding: "8px 14px", fontSize: 13, cursor: "pointer" }}>
+                    Descargar PDF
+                  </button>
+                  <button onClick={generarWordAsientos} style={{ background: "#2b579a", color: "#fff", border: "none", borderRadius: 5, padding: "8px 14px", fontSize: 13, cursor: "pointer" }}>
+                    Descargar Word
+                  </button>
+                </div>
+              </div>
+            )}
+          </section>
+          </React.Fragment>
+        )}
       </div>
     </div>
   );
