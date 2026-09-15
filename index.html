@@ -849,7 +849,11 @@ function ControlExamenes() {
   }
 
   function firmaPorCiclo(ciclo) {
-    return ciclo === "1er Ciclo" ? "JEFE DE CURSO DE 1ER. CICLO ECEME." : "EVALUADOR 2DO. CICLO ECEME.";
+    return ciclo === "1er Ciclo" ? "EVALUADOR DE 1ER. CICLO ECEME." : "EVALUADOR 2DO. CICLO ECEME.";
+  }
+
+  function firmaNombrePorCiclo(ciclo) {
+    return ciclo === "1er Ciclo" ? "My. DEM. Charles Michael Ortiz Valencia" : "Tcnl. DEM. Bladimir Soto Farfán";
   }
 
   function descargarWord(html, nombreArchivo) {
@@ -932,7 +936,7 @@ function ControlExamenes() {
       html += "</ul>";
     });
     html +=
-      '<br/><br/><div style="text-align:center;">Tcnl. DEM. Bladimir Soto Farfán</div>' +
+      '<br/><br/><div style="text-align:center;">' + firmaNombrePorCiclo(gruposResultado.ciclo) + "</div>" +
       '<div style="text-align:center;font-weight:bold;">' + firmaPorCiclo(gruposResultado.ciclo) + "</div>";
     descargarWord(html, "grupos_trabajo.doc");
   }
@@ -1009,7 +1013,7 @@ function ControlExamenes() {
       });
       const finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY : 45;
       doc.setFontSize(10);
-      doc.text("Tcnl. DEM. Bladimir Soto Farfán", 14, finalY + 14);
+      doc.text(firmaNombrePorCiclo(asientosResultado.ciclo), 14, finalY + 14);
       doc.text(firmaPorCiclo(asientosResultado.ciclo), 14, finalY + 20);
     });
     doc.save("distribucion_asientos.pdf");
@@ -1047,7 +1051,7 @@ function ControlExamenes() {
       html += "</table>";
     });
     html +=
-      '<br/><br/><div style="text-align:center;">Tcnl. DEM. Bladimir Soto Farfán</div>' +
+      '<br/><br/><div style="text-align:center;">' + firmaNombrePorCiclo(asientosResultado.ciclo) + "</div>" +
       '<div style="text-align:center;font-weight:bold;">' + firmaPorCiclo(asientosResultado.ciclo) + "</div>";
     descargarWord(html, "distribucion_asientos.doc");
   }
